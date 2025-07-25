@@ -1,0 +1,39 @@
+{
+    "default" : {
+        "start_time": 8,
+        "end_time": 18,
+        "schedule_items": [
+            {"location": "/foldername", "tags": ["block1"], "content": "ns"},
+            {"location": "/foldername", "tags": ["block1"]},
+            {"location": "/foldername", "tags": ["block1", "block3"]},
+            {"location": "/foldername", "tags": ["block1", "block3"]},
+            {"location": "/foldername", "tags": ["block2"], "content": "ns"},
+            {"location": "/foldername", "tags": ["block2"], "content": "ns"},
+            {"location": "/foldername", "tags": ["block2"], "content": "ns"},
+            {"location": "/foldername", "tags": ["block3"]}
+        ],
+        "schedule": {
+            "block1": {
+                "start": 8,
+                "end": 11
+            },
+            "block2": {
+                "start": 11,
+                "end": 15,
+                "allowed-content": ["ns"]
+            },
+            "block3": {
+                "start": 15,
+                "end": 18
+            },
+            "block4": {
+                "start": 18,
+                "end": 20
+            }
+        },
+        "bumpers": "./foldername",
+        "commercials": "./foldername"
+    },
+    "saturday" : {},
+    "sunday" : {}
+}

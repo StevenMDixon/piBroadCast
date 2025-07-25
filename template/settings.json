@@ -1,0 +1,7 @@
+{
+    "station_name": "kwb",
+    "subtitles:": "true",
+    "file_location": "",
+    "playlist_location": "",
+    "use_external_playlist": "http://blahblah:3k/myplaylist.m3u8"
+}
