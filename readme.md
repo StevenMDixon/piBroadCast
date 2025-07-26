@@ -18,7 +18,7 @@ The plan is to use 4 Raspberry pi's being piped into a `Channel Plus Box Model 5
 
 ```
 Pi 1 ______
-Pi 1 ______|               
+Pi 2 ______|               
 Pi 3 ______|                    
 Pi 4 ______|____QuadRF___Home Coaxial Setup ______ 4 Channels on reciever 
 ```
@@ -73,40 +73,38 @@ You may need to edit your margins. YMMV.
 
 Also depending on your composite cables red and yellow may be swapped.
 
+## Controlling VLC
 
-## Development
+We want to build a playlist from a scheduling template, then load that playlist into vlc
 
-First and foremost I need to figure out the best way to play video in the standard pi environment.
+python-vlc is what we are going to be using to facilitate 
 
-I've chosen to use docker for this project, because I will need to run the rpi image there for testing.
-
-I want the ability to swap content on the PI pretty easily and have chosen to put the content on an external usb.
-
-Station Content Layout:
-```
-/External_Drive
-    Schedule.json
-    Settings.json
-    /Shows
-        /Show 1
-        /Show 2
-    /Commercials
-    /Bumps
-```
-
-I am thinking I use Python to create a playlist for vlc and load that up.
-We can check what the current time is and move to the correct location in the playlist?
-
-Turns out we can!
+We can load a playlist from the cmd line
  vlc --playlist /path/to/your/playlist.m3u --start-time=seconds
+Or we can use python-vlc to programatically handle it:
 
- So we can to generate a playlist?
+``` python
+# media object
+media = vlc.Media("1mp4.mkv")
 
-Maybe a better version of this may be to use mpv a la; from python_mpv_jsonipc import MPV?
- I am seeing a ton of conflicting info around mpv so I am gonna stick with vlc for this project.
+ 
 
+# setting media to the media player
+media_player.set_media(media)
+```
 
-## Scheduling
+While running the player we can check if the playlist is still playing via: .is_playing()
+``` python
+While .is_playing():
+```
+
+So now we need to worry about scheduling
+
+* side note: 
+    Maybe a better version of this may be to use mpv a la; from python_mpv_jsonipc import MPV?
+    I am seeing a ton of conflicting info around mpv so I am gonna stick with vlc for this project.
+
+## Generating a schedule
 
 We need to generate a dynamic schedule for a (day || week)
 
@@ -118,13 +116,13 @@ using kwb as an example, their schedule was something like
 5-8p.m. (3 hours 6 episodes [Reruns][Non-Sequential])  
 
 Settings.json
-```
+``` json
 {
     "station_name": "kwb",
     "subtitles:": "true",
     "file_location": "",
     "playlist_location": "",
-    "use_external_playlist": "http://blahblah:3k/myplaylist.m3u8"
+    "schedule_increment": 30
 } 
 ```
 
@@ -137,7 +135,7 @@ playlist_location tells the scheduler where to save the schedules, and the playe
 Already have an external playlist? use_external_playlist will override the scheduler and play that network stream.
 
 ScheduleTemplate.json
-```
+``` json
 {
      "default" : {
         "start_time": 8,
@@ -200,6 +198,10 @@ Reruns
 We want to make sure that the first episode of tv show 1 happens sequentially before the episode shown in the first slot.
 
 ```
+
+### Actually generating the M3U8 Playlists
+
+https://en.wikipedia.org/wiki/M3U
 
 
 ## Program layout
