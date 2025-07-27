@@ -1,7 +1,7 @@
 #! /usr/bin/bash
 
 echo Installing VLC
-apt-get install vlc
+apt-get sudo install vlc
 
 echo Finding python installation...
 python=python3

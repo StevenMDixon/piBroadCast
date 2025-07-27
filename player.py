@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # Look for settings file, this should be local?
     # I imagine we should be able to overwrite this
     setting_file_path = 'template/settings.json'
-
+ 
     myStation = Station(setting_file_path)
 
     # Create a player

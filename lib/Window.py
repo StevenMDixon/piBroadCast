@@ -11,7 +11,7 @@ class Window:
         self.currentPLayer = player
 
         self.setIDonPlayer()
-        self.currentPLayer.play()
+        self.currentPLayer.start()
         self.run()
 
     def setWindowID(self):

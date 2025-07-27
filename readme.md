@@ -9,7 +9,7 @@ https://github.com/shane-mason/FieldStation42/tree/main
 
 I wanted to be able to play old media across my home via coaxial cables. Obviously going through my mid-life crisis here :-)
 
-I also wanted to have a strict control over what is being seen by my child, without potentially giving them access to the internet.
+I also wanted to have a strict control over what is being seen by my child, without potentially giving them access to the internet. And retain the ability to cut it off if need be :Devil
 
 
 ## The Ideal setup (mine)
@@ -80,7 +80,7 @@ We want to build a playlist from a scheduling template, then load that playlist 
 python-vlc is what we are going to be using to facilitate 
 
 We can load a playlist from the cmd line
- vlc --playlist /path/to/your/playlist.m3u --start-time=seconds
+
 Or we can use python-vlc to programatically handle it:
 
 ``` python
@@ -121,8 +121,7 @@ Settings.json
     "station_name": "kwb",
     "subtitles:": "true",
     "file_location": "",
-    "playlist_location": "",
-    "schedule_increment": 30
+    "playlist_location": ""
 } 
 ```
 
@@ -139,7 +138,7 @@ ScheduleTemplate.json
 {
      "default" : {
         "start_time": 8,
-        "end_time": 18,
+        "end_time": 18, // if this is -1 we stop at the start time?
         "schedule_items": [
             {"location": "/foldername", "tags": ["block1"], "content": "ns"},
             {"location": "/foldername", "tags": ["block1"]},
@@ -187,7 +186,7 @@ Blocks have their times, and content can be locked down to specific content type
  We want a schedule like
 
  ```
-| Tv show 1 | Bumpers/Commercials | Tv show 2 |  Bumpers/Commercials | Tv show 3 |... Etc
+| Tv show 1 | bumper| Commercials | bumper | Tv show 2 | bumper| Commercials | bumper | Tv show 3 |... Etc
  ```
 
 The idea box of wants:
@@ -196,7 +195,6 @@ A Concept of weekly new releases?
 Staggered syndication?
 Reruns
 We want to make sure that the first episode of tv show 1 happens sequentially before the episode shown in the first slot.
-
 ```
 
 ### Actually generating the M3U8 Playlists
@@ -207,10 +205,22 @@ https://en.wikipedia.org/wiki/M3U
 ## Program layout
 
 ### Setup.sh
-    Creates a cron job that runs the scheduler every day to generate a playlist :-)
+    Sets up venv and installs packages, make sure to run source ./setup.sh before trying to run the player
 
 ### Shedule Designer
     This handles creating the playlists for the day
 
 ### Player
     This handles starting up vlc and running the playlists
+
+## Trials and Tribulations
+
+The very first issue I ran into in this project was that by default the RPI4 is not setup to display an analog signal, this took a bit of research to figure out and there were a ton of 
+videos and forums that I had to peruse to find the final correct answer. see the section above on how to setup ;-)
+
+The next issue I ran into is that python_vlc operates differently than I would have expected when compared to VLC player. the library uses two different media players when working with one video vs a playlist.
+This was troublesome because the media_list_player that the lib provides is technically a wrapper that does not give you direct access to things like options for full screen and moving to a specific time in the play list. This was trivial when calling vlc through the cmd line,  `vlc --playlist /path/to/your/playlist.m3u --start-time=seconds`, this would start your playlist at the specific time that matched in the list and video. Which would have made it trivial to start the server at a specific time. In order to fix this I wound up having to add each item to the playlist individually. :-/ 
+
+A second issue cropped up around this, If the scheduler needs to crop a video there is no way to organically do this with a m3u8 playlist. You can tell anything reading the playlist where to start and how long each segment should be at the max but you cannot do it per file. Luckily the solution I came up with for the prior issue also helped solve this. I added two new properties `#x-start:10, #x-end:30` to my scheduler that will allow it to specify where in the video to start and where to end. 
+
+Orchestration - this is a big issue, how to I make sure each pi is playing and how do I ensure that the stream starts on time?
