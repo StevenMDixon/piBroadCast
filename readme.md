@@ -73,6 +73,11 @@ You may need to edit your margins. YMMV.
 
 Also depending on your composite cables red and yellow may be swapped.
 
+If you are planning on connecting the pis to other network items make sure to set the hostname!
+
+If you are planning on running media from an attached drive/usb, make sure to go into File_manager -> edit -> preference -> volumn management and deselect show available options.. Otherwise everytime you swap in a new drive you will get a popup
+
+
 ## Controlling VLC
 
 We want to build a playlist from a scheduling template, then load that playlist into vlc
@@ -200,6 +205,12 @@ We want to make sure that the first episode of tv show 1 happens sequentially be
 ### Actually generating the M3U8 Playlists
 
 https://en.wikipedia.org/wiki/M3U
+
+
+linux pathing for playlist
+```
+file:///media/{login_name}/{drive_name}/{file_name}
+```
 
 
 ## Program layout

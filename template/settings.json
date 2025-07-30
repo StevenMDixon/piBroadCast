@@ -1,7 +1,6 @@
 {
     "station_name": "kwb",
     "subtitles": true,
-    "file_location": "",
     "playlist_location": "./playlists/",
     "x": "http://api.toonamiaftermath.com:3000/est/playlist.m3u8",
     "start_time": -1
