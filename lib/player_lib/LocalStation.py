@@ -18,7 +18,7 @@ class LocalStation:
 
     def set_station_config(self, station_config):
         self.station_config = StationConfig(station_config)
-        self.set_playlist_src()
+        self.set_playlist_file()
         self.setup_playlist_data()
         self.set_timing()
 
@@ -26,8 +26,8 @@ class LocalStation:
         return False
 
     def setup_playlist_data(self):
-        if self.station_config.playlist_src:
-            self.playlist_data = M3u8Parser.parsefile(self.station_config.playlist_src)
+        if self.station_config.playlist_file:
+            self.playlist_data = M3u8Parser.parsefile(self.station_config.playlist_file)
 
     def load_station_config_from_file(self, configPath):
         try: 
@@ -42,16 +42,17 @@ class LocalStation:
                     "start_time": -1
             }
 
-    def set_playlist_src(self):
+    def set_playlist_file(self):
         try:
             contents = os.listdir(self.station_config.play_list_location)
             today = datetime.today().strftime('%Y-%m-%d')
             for item in contents:
+                print(today, item)
                 if today in item:
-                    self.station_config.playlist_src = self.station_config.play_list_location + item
+                    self.station_config.playlist_file = self.station_config.play_list_location + item
                     return
-
-            self.station_config.playlist_src =  ''
+            print(self.station_config.play_list_location)
+            self.station_config.playlist_file =  self.station_config.play_list_location + 'default.m3u8'
         except:
             return
 

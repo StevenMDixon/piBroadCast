@@ -1,39 +1,31 @@
-{
-    "default" : {
-        "start_time": 8,
-        "end_time": 18,
+{  
+    "config": {
+        "bumpers": "./foldername",
+        "commercials": "./foldername",
+        "drive_name": "",
         "schedule_items": [
-            {"location": "/foldername", "tags": ["block1"], "content": "ns"},
-            {"location": "/foldername", "tags": ["block1"]},
-            {"location": "/foldername", "tags": ["block1", "block3"]},
-            {"location": "/foldername", "tags": ["block1", "block3"]},
-            {"location": "/foldername", "tags": ["block2"], "content": "ns"},
-            {"location": "/foldername", "tags": ["block2"], "content": "ns"},
-            {"location": "/foldername", "tags": ["block2"], "content": "ns"},
-            {"location": "/foldername", "tags": ["block3"]}
-        ],
-        "schedule": {
-            "block1": {
-                "start": 8,
-                "end": 11
-            },
-            "block2": {
-                "start": 11,
-                "end": 15,
-                "allowed-content": ["ns"]
-            },
-            "block3": {
-                "start": 15,
-                "end": 18
-            },
-            "block4": {
-                "start": 18,
-                "end": 20
+                {"name": "name1", "locations": ["/foldername1", "/foldername2"]},
+                {"name": "name2", "locations": ["/foldername"]},
+                {"name": "name3", "locations": ["/foldername"]},
+                {"name": "name4", "locations": ["/foldername"]},
+                {"name": "name5", "locations": ["/foldername"]},
+                {"name": "name6", "locations": ["/foldername"]},
+                {"name": "name7", "locations": ["/foldername"]},
+                {"name": "name8", "locations": ["/foldername"]}
+            ]
+    },
+    "shedules": {
+        "default" : {
+            "schedule": {
+                "name1": {"duration": 60},
+                "name2": {"duration": 60},
+                "name3": {"duration": 60},
+                "name4": {"duration": 60},
+                "name5": {"duration": 60},
+                "name6": {"duration": 60}
             }
         },
-        "bumpers": "./foldername",
-        "commercials": "./foldername"
-    },
-    "saturday" : {},
-    "sunday" : {}
+        "saturday" : {},
+        "sunday" : {}
+    }
 }

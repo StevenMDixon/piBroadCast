@@ -6,10 +6,10 @@ class StationConfig():
         self.play_list_location = station_config["playlist_location"]
         self.start_time = station_config["start_time"]
 
-        if "station_src" in station_config:
-            self.playlist_src =  station_config["station_src"]
+        if "playlist_file" in station_config:
+            self.playlist_file =  station_config["playlist_file"]
         else:
-            self.playlist_src = ""
+            self.playlist_file = ""
 
 class PlayListItem():
     def __init__(self, path, duration, start_time_override = 0, end_time_override = 0):

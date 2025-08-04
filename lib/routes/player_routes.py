@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from lib.DataBase import DataBase
 import subprocess
+import sys
 
 player_bp = Blueprint('player', __name__, url_prefix='/player')
 
@@ -11,7 +11,7 @@ process = None
 def start_player():
     global process
     if process is None or process.poll() is not None:
-        process = subprocess.Popen(["python", "player_sub.py"])
+        process = subprocess.Popen([sys.executable, "player_sub.py"])
         return 'Running Player'
     else:
         return 'Player is already playing'

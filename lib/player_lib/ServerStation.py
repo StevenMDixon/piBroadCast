@@ -1,7 +1,7 @@
-import os
-import requests
 from datetime import datetime
-from .helper import M3u8Parser, StationConfig
+from .helper import M3u8Parser
+from lib.controller.Station_Controller import Station_Controller
+from lib.controller.Schedule_Controller import Schedule_Controller
 
 class ServerStation:
     def __init__(self):
@@ -10,38 +10,34 @@ class ServerStation:
         self.playlist_start_index = 0
         self.start_ff_time = 0
 
+        self.playlist = ""
+
         station_config_data = self.load_station_config()
         self.set_station_config(station_config_data)
+        print(self.playlist_start_index, self.start_ff_time)
         
-
     def set_station_config(self, station_config):
-        self.station_config = StationConfig(station_config)
-        self.setup_playlist_data()
-        self.set_timing()
+        self.station_config = station_config
+        self.data_changed()
 
     def data_changed(self):
-        new_station_config_data = self.load_station_config()
-        new_station = StationConfig(new_station_config_data)
-        print(new_station)
-        if new_station.playlist_src != self.station_config.playlist_src:
-            self.set_station_config(new_station_config_data)
+        todays_schedule = Schedule_Controller.get_todays_schedule(datetime.today().date())
+       
+        if self.playlist != todays_schedule.schedule_file_name:
+            self.playlist = todays_schedule.schedule_file_name
+
+            self.setup_playlist_data()
+            self.set_timing()
             return True
         else:
             return False
 
     def setup_playlist_data(self):
-        if self.station_config.playlist_src:
-            self.playlist_data = M3u8Parser.parsefile(self.station_config.playlist_src)
+        if self.playlist:
+            self.playlist_data = M3u8Parser.parsefile(self.playlist)
 
     def load_station_config(self):
-        print("Pinging Home Base")
-        url = "http://127.0.0.1:5000/station"
-        response = requests.get(url)
-        if response.status_code == 200:
-            print("response:", response.json)
-            return response.json()
-        else:
-            return ""
+        return Station_Controller.get_current_station_config()
 
     def set_timing(self):
         ff = 0
@@ -49,6 +45,7 @@ class ServerStation:
 
         if self.station_config.start_time > 0:
             ff = self.get_delta_time()
+            print(ff)
 
         for item in self.playlist_data:
             if ff > item.duration:

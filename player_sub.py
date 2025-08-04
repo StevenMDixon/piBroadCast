@@ -1,8 +1,8 @@
 import sys
-from lib.ServerStation import ServerStation
-from lib.LocalStation import LocalStation
-from lib.Window import Window
-from lib.VLCPlayer import VLCPlayer
+from lib.player_lib.ServerStation import ServerStation
+from lib.player_lib.LocalStation import LocalStation
+from lib.player_lib.Window import Window
+from lib.player_lib.VLCPlayer import VLCPlayer
 
 if __name__ == "__main__":
     window = Window()
@@ -11,7 +11,7 @@ if __name__ == "__main__":
         print(sys.argv)
         myStation = LocalStation(sys.argv[1])
     else:
-        print("Running Server PLayer")
+        print("Running Server Player")
         myStation = ServerStation()
 
     # Create a player

@@ -8,7 +8,7 @@ class Window:
         self.player_frame = tk.Frame(self.root, bg="black")
         self.player_frame.pack(fill=tk.BOTH, expand=True)
         self.root.attributes('-fullscreen', True)
-
+        self.root.config(cursor="none")
         self.current_player = None
         self.root.bind("<KeyPress>", self.handleKeyPress)
 
