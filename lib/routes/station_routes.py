@@ -5,22 +5,6 @@ import json
 
 station_bp = Blueprint('station', __name__, url_prefix='/station')
 
-# def load_station_config(configPath):
-#     try:
-#         with open(configPath, 'r') as file:
-#             # Load the JSON data from the file into a Python dictionary or list
-#             return json.load(file)
-#     except:
-#         return  {
-#             "station_name": "default_station",
-#             "subtitles": False,
-#             "playlist_location": "./playlists/",
-#             "playlist_file": "",
-#             "start_time": -1 
-#         }
-
-# current_station_info = load_station_config("./template/settings.json")
-
 @station_bp.route('/')
 
 def get_station_info():

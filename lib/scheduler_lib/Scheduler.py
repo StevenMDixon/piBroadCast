@@ -99,7 +99,7 @@ class Scheduler():
                 self.start_scheduling_date = datetime.strptime(ScheduleData(*self.most_recent_schedule).schedule_date, "%Y-%m-%d").date()
                 days_to_add = 1
 
-            if abs(datetime.today().date() - self.start_scheduling_date).days > 0:
+            if abs(datetime.today().date() - self.start_scheduling_date).days < 0:
                   print("scheduling has already been completed for this date")
                   quit()
 
@@ -107,7 +107,7 @@ class Scheduler():
 
             # schedule_config = self.schedule_template_data['config']
             current_date = self.start_scheduling_date + timedelta(days_to_add)
-            end_date = self.start_scheduling_date + timedelta(days = 1)
+            end_date = current_date + timedelta(days = 8)
 
             schedules = self.schedule_template_data['shedules']
 
@@ -130,11 +130,10 @@ class Scheduler():
             todays_name = calendar.day_name[date_to_schedule.weekday()]
             todays_schedule = schedules[todays_name] if todays_name  in schedules else schedules["default"] 
 
-            print(todays_schedule)
             schedule_stack = []
 
             for template_block in todays_schedule:
-                block = self.schedule_block(template_block["duration"], template_block["show"], stored_played_ids)
+                block = self.schedule_block(template_block["duration"], template_block["show_name"], stored_played_ids)
                 schedule_stack += block
                 #update the played shows
                 Episode_Controller.increment_played_count(list(map(lambda x: x.episode_data.id, block)))
@@ -146,19 +145,19 @@ class Scheduler():
 
 
         def schedule_block(self, duration, show_name, played) -> list[BlockItem]:
-            episodes = Episode_Controller.get_all_epicode_metadata_by_type_by_lowest_play_count('show', show_name, played)
+            episodes = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('show', show_name, played)
 
             fill_episode_duration = duration * 60
 
             block = []
-
+            
             while fill_episode_duration > 0:
-                chosen_episode = random.choice(list(filter(lambda x: x.id not in played, episodes)))
+                test = list(filter(lambda x: x.id not in played, episodes))
+                chosen_episode =  random.choice(test)
                 block.append(BlockItem(chosen_episode, 0, chosen_episode.episode_length))
                 block += self.fill_commercials_bumpers(30*60 - chosen_episode.episode_length)
                 played.append(chosen_episode.id)
                 fill_episode_duration -= max(chosen_episode.episode_length, 30 * 60)
-
 
             return block
             

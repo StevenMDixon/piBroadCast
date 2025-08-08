@@ -24,7 +24,7 @@ class Schedule_Template_Controller:
         if config is not None:
             return Schedule_Template_Controller._convert(config)
         return None
-
+    
     @staticmethod
     def set_schedule_template(template_file_data):
         db = DataBase._get_conn()

@@ -68,3 +68,6 @@ class Schedule_Controller:
         db.commit()
         db.close()
 
+    @staticmethod
+    def add_scheduler_to_chron(id: int) -> None:
+        pass

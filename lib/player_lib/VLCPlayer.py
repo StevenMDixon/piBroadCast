@@ -14,7 +14,6 @@ class VLCPlayer:
        
         list_player = self.instance.media_list_player_new()
         media_player = self.instance.media_player_new()
-
         # media_player.video_set_aspect_ratio("4:3")
         # media_player.video_set_crop_geometry("680x480+0+0")
         # media_player.video_set_scale(2.5)
@@ -37,9 +36,11 @@ class VLCPlayer:
             if index == 0:
                 start_media_at += self.station.start_ff_time
 
-            media.add_option(f"start-time={start_media_at}")
+            # setting start and stop times can be expensive, and may cause issues.
+            if start_media_at > 0:
+                media.add_option(f"start-time={start_media_at}")
 
-            if playlistitem.end_time_override > 0:
+            if playlistitem.end_time_override != playlistitem.og_duration:
                 media.add_option(f"stop-time={playlistitem.end_time_override}")
 
             # Turn of hardware accelerated decoding as it causes some issues with videos on the rpi, 

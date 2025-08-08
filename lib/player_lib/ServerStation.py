@@ -22,7 +22,10 @@ class ServerStation:
 
     def data_changed(self):
         todays_schedule = Schedule_Controller.get_todays_schedule(datetime.today().date())
-       
+        
+        if todays_schedule is None:
+            return False
+        
         if self.playlist != todays_schedule.schedule_file_name:
             self.playlist = todays_schedule.schedule_file_name
 

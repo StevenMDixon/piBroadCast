@@ -16,6 +16,7 @@ class PlayListItem():
         self.path = path
         self.start_time_override = start_time_override if start_time_override > 0 else 0
         self.end_time_override = end_time_override if end_time_override > 0 else duration
+        self.og_duration = duration
         self.duration = (self.end_time_override if self.end_time_override < duration else duration) - self.start_time_override
 
 class M3u8Parser():

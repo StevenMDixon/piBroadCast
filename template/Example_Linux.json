@@ -1,0 +1,45 @@
+{  
+    "config": {
+        "bumpers": "/bumpers",
+        "commercials": "/commercials",
+        "start_time": 6,
+        "drive_name": "media/{user}/drive",
+        "schedule_items": [
+                {"name": "AAAHH REAL MONSTERS", "locations": ["/nick/AAAHH REAL MONSTERS/Season 1"]},
+                {"name": "Avatar The Last Airbender", "locations": ["/nick/Avatar The Last Airbender/Season 1"]},
+                {"name": "Blues Clues", "locations": ["/nick/Blues Clues/Season 1"]},
+                {"name": "CatDog", "locations": ["/nick/CatDog/Season 1"]},
+                {"name": "Chalkzone", "locations": ["/nick/Chalkzone/Season 1"]},
+                {"name": "DANNY PHANTOM", "locations": ["/nick/DANNY PHANTOM/Season 1"]},
+                {"name": "Go Diego Go", "locations": ["/nick/Go Diego Go/Season 1"]},
+                {"name": "HEY ARNOLD", "locations": ["/nick/HEY ARNOLD/Season 1"]},
+                {"name": "Invader_Zim", "locations": ["/nick/Invader_Zim/"]},
+                {"name": "JIMMY NEUTRON", "locations": ["/nick/JIMMY NEUTRON/Season 1"]},
+                {"name": "Richard Scarrys Busy Town", "locations": ["/nick/Richard Scarrys Busy Town/Disk 1"]},
+                {"name": "Rocket Power", "locations": ["/nick/Rocket Power/Season 1/", "/nick/Rocket Power/Season 2/"]},
+                {"name": "Rugrats", "locations": ["/nick/Rugrats/Season 1", "/nick/Rugrats/Season 2", "/nick/Rugrats/Season 3"]},
+                {"name": "Spongebob", "locations": ["/nick/Spongebob/Season 2"]},
+                {"name": "Teenage Mutant NINJA TURTLES", "locations": ["/nick/Teenage Mutant NINJA TURTLES/Season 1"]},
+                {"name": "The Angry Beavers", "locations": ["/nick/The Angry Beavers/Season 1"]},
+                {"name": "The Fairly Oddparents", "locations": ["/nick/The Fairly Oddparents/"]},
+                {"name": "THE WILD THORNBERRYS", "locations": ["/nick/THE WILD THORNBERRYS/Season 1"]},
+                {"name": "Weinerville", "locations": ["/nick/Weinerville/Episodes"]}
+        ]
+    },
+    "shedules": {
+        "default" : [
+            {"show_name": "Blues Clues", "duration": 60},
+            {"show_name": "CatDog", "duration": 30},
+            {"show_name": "THE WILD THORNBERRYS", "duration": 60},
+            {"show_name": "HEY ARNOLD", "duration": 60},
+            {"show_name": "Rugrats", "duration": 60},
+            {"show_name": "Spongebob", "duration": 240},
+            {"show_name": "Go Diego Go", "duration": 60},
+            {"show_name": "Richard Scarrys Busy Town", "duration": 30},
+            {"show_name": "Rocket Power", "duration": 90},
+            {"show_name": "DANNY PHANTOM", "duration": 30},
+            {"show_name": "The Fairly Oddparents", "duration": 30},
+            {"show_name": "The Angry Beavers", "duration": 30}
+        ]
+    }
+}

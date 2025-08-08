@@ -40,16 +40,16 @@ class Episode_Controller:
         return Episode_Controller._convert_list(cursor.fetchall())
     
     @staticmethod
-    def get_all_epicode_metadata_by_type_by_lowest_play_count(type, show_name, already_played) -> list[EpisodeData]:
+    def get_all_episode_metadata_by_type_by_lowest_play_count(type, show_name, already_played) -> list[EpisodeData]:
         db = DataBase._get_conn()
         cursor = db.cursor()
 
         if len(already_played) > 0:
             placeholders = ', '.join('?' * len(already_played))
-            sql = f"SELECT * FROM episode_metadata where media_type = ? and show_name = ? and id not in ({placeholders}) ORDER BY play_count ASC LIMIT 5"
+            sql = f"SELECT * FROM episode_metadata where media_type = ? and show_name = ? and id not in ({placeholders}) ORDER BY play_count ASC LIMIT 10"
             params = (type, show_name, *already_played)
         else:
-            sql = f"SELECT * FROM episode_metadata where media_type = ? and show_name = ? ORDER BY play_count ASC LIMIT 5"
+            sql = f"SELECT * FROM episode_metadata where media_type = ? and show_name = ? ORDER BY play_count ASC LIMIT 10"
             params = (type, show_name)
 
         cursor.execute(sql, params)
@@ -76,7 +76,7 @@ class Episode_Controller:
     def increment_played_count(episodes: list):
         db = DataBase._get_conn()
         cursor = db.cursor()
-        
+
         prepared = [tuple([id]) for id in episodes]
         cursor.executemany("UPDATE episode_metadata SET play_count = play_count + 1 WHERE id = ? ", prepared)
         db.commit()

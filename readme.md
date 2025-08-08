@@ -51,7 +51,7 @@ dtoverlay=vc4-kms-v3d
 To
 ```
 # Enable DRM VC4 V3D driver
-dtoverlay=vc4-kms-v3d,composite
+dtoverlay=
 ```
 
 Then add this anywhere
