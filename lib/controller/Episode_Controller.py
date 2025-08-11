@@ -46,10 +46,10 @@ class Episode_Controller:
 
         if len(already_played) > 0:
             placeholders = ', '.join('?' * len(already_played))
-            sql = f"SELECT * FROM episode_metadata where media_type = ? and show_name = ? and id not in ({placeholders}) ORDER BY play_count ASC LIMIT 10"
+            sql = f"SELECT * FROM episode_metadata where media_type = ? and show_name = ? and id not in ({placeholders}) ORDER BY play_count ASC LIMIT 20"
             params = (type, show_name, *already_played)
         else:
-            sql = f"SELECT * FROM episode_metadata where media_type = ? and show_name = ? ORDER BY play_count ASC LIMIT 10"
+            sql = f"SELECT * FROM episode_metadata where media_type = ? and show_name = ? ORDER BY play_count ASC LIMIT 20"
             params = (type, show_name)
 
         cursor.execute(sql, params)

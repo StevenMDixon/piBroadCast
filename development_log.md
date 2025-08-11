@@ -151,3 +151,7 @@ Orchestration - this is a big issue, how to I make sure each pi is playing and h
 The answer, I am just going to run it with the server
 All config setup can be done through the server, and I expect it to be running at all times.
 I will just create a call back that runs every so often and calls the scheduler as a sub process. I have the scheduler only set to create schedules for a 7 day period and it should not run over itself.
+
+### vlc freezing
+
+Randomly vlc would just stop playing when trying to move onto the next item in the playlist, it took a long time to diagnose this because of the infrequency of the issue. It turns out the issue was with the external drive and how it was connected to the pi. I had it connected via the old school usb ports and this was causing some latency when retrieving the files.

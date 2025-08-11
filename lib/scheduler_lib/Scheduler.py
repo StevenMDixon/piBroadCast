@@ -3,6 +3,7 @@ import json
 from datetime import date, datetime, timedelta
 import calendar
 from dataclasses import dataclass
+import math
 from lib.controller.Episode_Controller import Episode_Controller
 from lib.controller.Schedule_Controller import Schedule_Controller
 from lib.controller.Schedule_Template_Controller import Schedule_Template_Controller
@@ -57,6 +58,7 @@ class Scheduler():
 
         def rebuild_data_base(self):
             Episode_Controller.delete_all_episode_metadata()
+            Schedule_Controller.delete_all_schedules()
             self.build_data_base()
 
         def build_data_base(self):
@@ -148,16 +150,28 @@ class Scheduler():
             episodes = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('show', show_name, played)
 
             fill_episode_duration = duration * 60
-
             block = []
-            
+
             while fill_episode_duration > 0:
                 test = list(filter(lambda x: x.id not in played, episodes))
+
                 chosen_episode =  random.choice(test)
+
+                episode_length_min = self._get_block_min_time(chosen_episode.episode_length)
+
+                if episode_length_min > fill_episode_duration:
+
+                    continue
+
+                print(f"chosen episode {chosen_episode.episode_name} length {chosen_episode.episode_length} min {episode_length_min} fill time {fill_episode_duration}")
+
                 block.append(BlockItem(chosen_episode, 0, chosen_episode.episode_length))
-                block += self.fill_commercials_bumpers(30*60 - chosen_episode.episode_length)
+
+                block += self.fill_commercials_bumpers(episode_length_min - chosen_episode.episode_length)
+
                 played.append(chosen_episode.id)
-                fill_episode_duration -= max(chosen_episode.episode_length, 30 * 60)
+
+                fill_episode_duration -= episode_length_min
 
             return block
             
@@ -198,6 +212,8 @@ class Scheduler():
 
             return {'schedule_date': date, 'schedule_file_name': directory + f"{date}.m3u8"}
 
-
+        def _get_block_min_time(self, time):
+            seconds = 60 * 15
+            return seconds * math.ceil(time / seconds)
 
 

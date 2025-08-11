@@ -69,5 +69,9 @@ class Schedule_Controller:
         db.close()
 
     @staticmethod
-    def add_scheduler_to_chron(id: int) -> None:
-        pass
+    def delete_all_schedules() -> None:
+        db = DataBase._get_conn()
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM schedule_metadata")
+        db.commit()
+        db.close()

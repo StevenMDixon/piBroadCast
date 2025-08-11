@@ -3,7 +3,7 @@
         "bumpers": "/bumpers",
         "commercials": "/commercials",
         "start_time": 6,
-        "drive_name": "media/{user}/drive",
+        "drive_name": "///media/{user}/{drive_name}",
         "schedule_items": [
                 {"name": "AAAHH REAL MONSTERS", "locations": ["/nick/AAAHH REAL MONSTERS/Season 1"]},
                 {"name": "Avatar The Last Airbender", "locations": ["/nick/Avatar The Last Airbender/Season 1"]},

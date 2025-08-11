@@ -31,9 +31,8 @@ def set_schedule_template_from_file():
 
 def set_schedule_template_from_data():
     data = json.dumps(request.json)
-    print(data)
     Schedule_Template_Controller.set_schedule_template(data.encode('utf-8'))
-    return "",200
+    return "", 200
 
 @schedule_bp.route('/template', methods=['GET'])
 
@@ -84,5 +83,7 @@ def run_auto_schedule():
     if process is None or process.poll() is not None:
         process = subprocess.Popen([sys.executable, "scheduler_sub.py", "--Schedule"])
 
-
-    return "", 20
+@schedule_bp.route('/delete', methods=['POST'])
+def run_delete_schedule():
+    Schedule_Controller.delete_all_schedules()
+    return "", 204

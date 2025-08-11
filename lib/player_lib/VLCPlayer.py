@@ -26,6 +26,11 @@ class VLCPlayer:
     def create_media_list(self, station):
         media_list = self.instance.media_list_new()
 
+        if self.station.start_ff_time < 0:
+            pre_schedule_media = self.instance.media_new('./signoff/color_bars.png', f':image-duration={station.start_ff_time * 1000}')
+            media_list.add_media(pre_schedule_media)
+            self.station.start_ff_time = 0
+
         for index, playlistitem in enumerate(station.playlist_data[station.playlist_start_index:]):
             media = self.instance.media_new(playlistitem.path)
             start_media_at = 0
@@ -40,8 +45,7 @@ class VLCPlayer:
             if start_media_at > 0:
                 media.add_option(f"start-time={start_media_at}")
 
-            if playlistitem.end_time_override != playlistitem.og_duration:
-                media.add_option(f"stop-time={playlistitem.end_time_override}")
+            media.add_option(f"stop-time={playlistitem.end_time_override}")
 
             # Turn of hardware accelerated decoding as it causes some issues with videos on the rpi, 
             media.add_option(":avcodec-hw=none")
