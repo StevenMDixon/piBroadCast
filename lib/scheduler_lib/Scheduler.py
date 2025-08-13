@@ -101,7 +101,16 @@ class Scheduler():
                 self.start_scheduling_date = datetime.strptime(ScheduleData(*self.most_recent_schedule).schedule_date, "%Y-%m-%d").date()
                 days_to_add = 1
 
-            if abs(datetime.today().date() - self.start_scheduling_date).days < 0:
+            print(abs(datetime.today().date() - self.start_scheduling_date).days)
+
+            do_scheduling = True
+            today = date(2025, 8, 28)
+
+            print((today - self.start_scheduling_date).days)
+            if (today - self.start_scheduling_date).days < 0:
+                do_scheduling = False
+
+            if not do_scheduling:
                   print("scheduling has already been completed for this date")
                   quit()
 
@@ -113,21 +122,13 @@ class Scheduler():
 
             schedules = self.schedule_template_data['shedules']
 
-            self.stored_commercials = Episode_Controller.get_all_episode_metadata_by_type("commercial")
-
-            self.stored_bumpers = Episode_Controller.get_all_episode_metadata_by_type("bumper")
-
             while current_date < end_date:
                 self.create_days_schedule(schedules, current_date)
                 current_date += timedelta(days=1)
 
 
-        def create_days_schedule(self, schedules, date_to_schedule):
-            # stored_shows = Episode_Controller.get_all_epicode_metadata_by_type("show")
-            
+        def create_days_schedule(self, schedules, date_to_schedule):            
             stored_played_ids = []
-            # id is unique per
-            # print(list(filter(lambda x: x.id > 5, stored_shows)))
 
             todays_name = calendar.day_name[date_to_schedule.weekday()]
             todays_schedule = schedules[todays_name] if todays_name  in schedules else schedules["default"] 
@@ -148,6 +149,8 @@ class Scheduler():
 
         def schedule_block(self, duration, show_name, played) -> list[BlockItem]:
             episodes = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('show', show_name, played)
+            commercials = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('commercial', 'commercial', [])
+            bumpers = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('bumper', 'bumper', [])
 
             fill_episode_duration = duration * 60
             block = []
@@ -159,15 +162,11 @@ class Scheduler():
 
                 episode_length_min = self._get_block_min_time(chosen_episode.episode_length)
 
-                if episode_length_min > fill_episode_duration:
-
-                    continue
-
                 print(f"chosen episode {chosen_episode.episode_name} length {chosen_episode.episode_length} min {episode_length_min} fill time {fill_episode_duration}")
 
                 block.append(BlockItem(chosen_episode, 0, chosen_episode.episode_length))
 
-                block += self.fill_commercials_bumpers(episode_length_min - chosen_episode.episode_length)
+                block += self.fill_commercials_bumpers(episode_length_min - chosen_episode.episode_length, commercials, bumpers)
 
                 played.append(chosen_episode.id)
 
@@ -175,27 +174,27 @@ class Scheduler():
 
             return block
             
-        def fill_commercials_bumpers(self, remaining_time) -> list[BlockItem]:
-            bumper1 = random.choice(self.stored_bumpers)
-            bumper2 = random.choice(self.stored_bumpers)
+        def fill_commercials_bumpers(self, remaining_time, commercials, bumpers) -> list[BlockItem]:
+            bumper1 = random.choice(bumpers)
+            bumper2 = random.choice(bumpers)
 
             remaining_time -= bumper1.episode_length
             remaining_time -= bumper2.episode_length
 
-            commercials = []
+            selected_commercials = []
 
             while remaining_time > 0:
-                commercial = random.choice(self.stored_commercials)
+                selected_commercial = random.choice(commercials)
 
-                remaining_time -= commercial.episode_length
+                remaining_time -= selected_commercial.episode_length
 
                 offset = 0
                 if remaining_time < 0:
                      offset = remaining_time
 
-                commercials.append(BlockItem(commercial, 0, commercial.episode_length + offset))
-                    
-            return [BlockItem(bumper1, 0, bumper1.episode_length), *commercials, BlockItem(bumper2, 0, bumper2.episode_length)]
+                selected_commercials.append(BlockItem(selected_commercial, 0, selected_commercial.episode_length + offset))
+
+            return [BlockItem(bumper1, 0, bumper1.episode_length), *selected_commercials, BlockItem(bumper2, 0, bumper2.episode_length)]
 
         def write_schedule_to_file(self, schedule_data: list[BlockItem], date) :
             current_station_config = Station_Controller.get_current_station_config()
