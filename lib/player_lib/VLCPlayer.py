@@ -5,8 +5,8 @@ event_types = []
 class VLCPlayer:
     def __init__(self, station):
         self.station = station
-        # Options ['--file-caching=5000', '--network-caching=10000', '--verbose']
-        self.instance = vlc.Instance()
+        # Options ['--file-caching=5000', '--network-caching=10000', '--verbose=3']
+        self.instance = vlc.Instance(['--no-skip-frames', '--no-xlib', '--file-caching=5000','--network-caching=5000'])
         self.player = self.createListPlayer()
     
     def createListPlayer(self): 
@@ -47,8 +47,9 @@ class VLCPlayer:
 
             media.add_option(f"stop-time={playlistitem.end_time_override}")
 
-            # Turn of hardware accelerated decoding as it causes some issues with videos on the rpi, 
-            media.add_option(":avcodec-hw=none")
+            # Turn off hardware accelerated decoding as it causes some issues with videos on the rpi,
+            # Turning it back on because of some info I found online.
+            # media.add_option(":avcodec-hw=none")
 
             media_list.add_media(media)
 
@@ -64,7 +65,7 @@ class VLCPlayer:
         self.player.play()
 
     #implemented in window to pass key presses to the player
-    def handleKeyPress(self, keypress):
+    #def handleKeyPress(self, keypress):
         # # if we press the space bar resume playing
         # if keypress == 32:
         #     my_media_list = self.create_media_list(self.station)
@@ -72,7 +73,7 @@ class VLCPlayer:
         #     self.player.set_media_list(my_media_list)
         #     self.player.play()
         # print(keypress)
-        return
+        #return
 
     def periodic_task(self):
         if self.station.data_changed():

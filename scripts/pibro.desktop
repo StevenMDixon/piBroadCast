@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Exec=lxterminal -e 'bash -c "/home/piratestation/Desktop/pibro.sh"'
+Terminal=true

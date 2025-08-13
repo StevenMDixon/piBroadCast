@@ -10,7 +10,7 @@ class Window:
         self.root.attributes('-fullscreen', True)
         self.root.config(cursor="none")
         self.current_player = None
-        self.root.bind("<KeyPress>", self.handleKeyPress)
+        # self.root.bind("<KeyPress>", self.handleKeyPress)
 
     def set_player(self, vlc_player):
         self.current_player = vlc_player
@@ -19,7 +19,7 @@ class Window:
         self.run()
 
     def setWindowID(self):
-            self.window_id = self.player_frame.winfo_id()
+        self.window_id = self.player_frame.winfo_id()
     
     def setIDonPlayer(self):
         self.setWindowID()
@@ -34,7 +34,6 @@ class Window:
             self.current_player.handleKeyPress(event.keycode)
 
     def run_player_tasks(self):
-         print("Running Periodic Tasks")
          self.current_player.periodic_task()
          self.root.after(5000, self.run_player_tasks)
     
