@@ -17,15 +17,18 @@ I also wanted to have a strict control over what is being seen by my child, with
 The plan is to use 4 Raspberry pi's being piped into a `Channel Plus Box Model 5545 Quad Digital Modulator` that will result in any tv in the house being able to pickup 4 channels that are specified from the QuadRF
 
 ```
-Pi 1 ______
-Pi 2 ______|               
-Pi 3 ______|                    
-Pi 4 ______|____QuadRF___Home Coaxial Setup ______ 4 Channels on reciever 
+___________________
+|_Pi 1 ______      | NAS
+|_Pi 2 ______|               
+|_Pi 3 ______|                    
+|_Pi 4 ______|____QuadRF___Home Coaxial Setup ______ 4 Channels on reciever 
 ```
 
 So long as you have a way to mix signals before piping it into your walls you theoretically could expand this past the 4 channels, at that point it may be more cost effective to go with a software solution instead.
 
 4 channels is all I really need, I'm located in GA, and I plan on use channels 13, 32, 33, 34 for this project. IFYKYK
+
+(Hey future steven here, it turns out overriding channels under 65 is illegal here in the States... boooooooo)
 
 Media takes up a ton of space, so how do we get it to the pi?
 
@@ -33,6 +36,8 @@ We can actually use a couple methods!
 1. External HDD/USB
 2. Network shares, VLC can mount smb shares and network drives!
 3. Copy files directly to the pi's internal system
+
+not going through how to set that up...
 
 ## Setting up a raspberry pi
 
@@ -57,8 +62,6 @@ dtoverlay=vc4-kms-v3d,composite
 Then add this anywhere
 ```
 enable_tvout=1
-sdtv_mode=0
-sdtv_aspect=4:3
 ```
 This will disable hdmi out, you can try autodetect but i found it is not reliable
 
@@ -70,7 +73,7 @@ In cmdline.txt add this to the end
 video=Composite-1:720x480@60ie
 ```
 
-you can add `,margin_left=40,margin_right=40,margin_top=32,margin_bottom=32` to the end of the line above but it will have negative effects on vlc
+you can add `,margin_left=10,margin_right=10,margin_top=32,margin_bottom=32` to the end of the line above but it will have negative effects on vlc
 
 You may need to edit your margins. YMMV.
 
@@ -80,6 +83,18 @@ If you are planning on connecting the pis to other network items make sure to se
 
 If you are planning on running media from an attached drive/usb, make sure to go into File_manager -> edit -> preference -> volumn management and deselect show available options.. Otherwise everytime you swap in a new drive you will get a popup
 
+### Auto start
+
+since we are using vlc we need to run this when the desktop is started and the user is logged in.
+I accomplished this through .Desktop files in /.config/autostart
+
+```
+update pibro.desktop to point at your instalation
+update pibro.sh to match your setup (I have a network mount that I included)
+copy scripts/pibro.desktop to ~/.config/autostart
+reboot your pi
+profit
+```
 
 ## Program layout
 
