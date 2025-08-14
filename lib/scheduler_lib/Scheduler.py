@@ -101,17 +101,14 @@ class Scheduler():
                 self.start_scheduling_date = datetime.strptime(ScheduleData(*self.most_recent_schedule).schedule_date, "%Y-%m-%d").date()
                 days_to_add = 1
 
-            print(abs(datetime.today().date() - self.start_scheduling_date).days)
-
             do_scheduling = True
             today = date(2025, 8, 28)
-
-            print((today - self.start_scheduling_date).days)
+    
             if (today - self.start_scheduling_date).days < 0:
                 do_scheduling = False
 
             if not do_scheduling:
-                  print("scheduling has already been completed for this date")
+                  print(f"scheduling has already been completed for this date {self.start_scheduling_date}")
                   quit()
 
             print(f"scheduling starting at: {self.start_scheduling_date}")
@@ -126,8 +123,7 @@ class Scheduler():
                 self.create_days_schedule(schedules, current_date)
                 current_date += timedelta(days=1)
 
-
-        def create_days_schedule(self, schedules, date_to_schedule):            
+        def create_days_schedule(self, schedules, date_to_schedule):
             stored_played_ids = []
 
             todays_name = calendar.day_name[date_to_schedule.weekday()]
@@ -141,6 +137,7 @@ class Scheduler():
                 #update the played shows
                 Episode_Controller.increment_played_count(list(map(lambda x: x.episode_data.id, block)))
 
+            print(f"Schedule for {date_to_schedule} created with {len(schedule_stack)} items complete")
             # create the schedule object
             # Write the days shedule to file and update the db
             file_info = self.write_schedule_to_file(schedule_stack, date_to_schedule)

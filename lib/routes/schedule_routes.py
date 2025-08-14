@@ -6,6 +6,7 @@ from lib.controller.Schedule_Controller import Schedule_Controller
 from lib.controller.Schedule_Template_Controller import Schedule_Template_Controller
 from lib.models.dto import ScheduleTemplateData, ScheduleData
 from datetime import datetime
+from lib.routes.process_handler import run_auto_schedule, run_scheduler, stop_auto_scheduler
 
 schedule_bp = Blueprint('schedule', __name__, url_prefix='/schedule')
 
@@ -47,41 +48,36 @@ def get_schedule_template():
 def get_todays_schedule():
     response = Schedule_Controller.get_todays_schedule(datetime.today().date())
     if response is not None:
-        return jsonify(ScheduleData(**response)), 200
-    return "", 204
+        return jsonify(response), 200
+    return "No Schedule Found", 204
 
 @schedule_bp.route('/run/rebuild', methods=['GET'])
 
 def run_rebuild_schedule():
-    global process
-    if process is None or process.poll() is not None:
-        process = subprocess.Popen([sys.executable, "scheduler_sub.py", "--Rebuild"])
-        return "Rebuilding schedule database", 200
-    return "", 204
+    run_scheduler("--Rebuild")
+    return "Rebuilding schedule database", 200
 
 @schedule_bp.route('/run/build', methods=['GET'])
 
 def run_build_schedule():
-    global process
-    if process is None or process.poll() is not None:
-        process = subprocess.Popen([sys.executable, "scheduler_sub.py", "--Build"])
-        return "Building schedule database", 200
-    return "", 204
+    run_scheduler("--Build")
+    return "Building schedule database", 200
 
 @schedule_bp.route('/run/schedule', methods=['GET'])
 
 def run_create_schedule():
-    global process
-    if process is None or process.poll() is not None:
-        process = subprocess.Popen([sys.executable, "scheduler_sub.py", "--Schedule"])
-        return "Creating schedules", 200
-    return "", 204
+    run_scheduler("--Schedule")
+    return "Creating schedules", 200
 
 @schedule_bp.route('/run/auto', methods=['POST'])
-def run_auto_schedule():
-    global process
-    if process is None or process.poll() is not None:
-        process = subprocess.Popen([sys.executable, "scheduler_sub.py", "--Schedule"])
+def run_auto():
+    run_auto_schedule()
+    return "", 204
+
+@schedule_bp.route('/run/auto_stop', methods=['POST'])
+def run_auto_stop():
+    stop_auto_scheduler()
+    return "Stopping automatic scheduling", 200
 
 @schedule_bp.route('/delete', methods=['POST'])
 def run_delete_schedule():

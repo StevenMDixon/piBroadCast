@@ -13,7 +13,7 @@ class VideoLoader:
                 for file in files:
                     if file.lower().endswith(video_extensions):
                         full_path = os.path.join(root, file)
-                        print(full_path)
+                        
                         duration = float(ffmpeg.probe(full_path)["format"]["duration"])
                         #m3u8 files dont have floating points, so we'll just round down :-)
                         video_files.append({'path': 'file:' + pathname2url(full_path), 'name': file, 'duration': int(duration), 'media_type': type, 'bumper_data': ''})

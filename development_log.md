@@ -155,3 +155,30 @@ I will just create a call back that runs every so often and calls the scheduler 
 ### vlc freezing
 
 Randomly vlc would just stop playing when trying to move onto the next item in the playlist, it took a long time to diagnose this because of the infrequency of the issue. It turns out the issue was with the external drive and how it was connected to the pi. I had it connected via the old school usb ports and this was causing some latency when retrieving the files.
+
+### Auto start and why I hate linux
+
+since we are using vlc we need to run this when the desktop is started and the user is logged in.
+I accomplished this through .Desktop files in /.config/autostart,, why did this need to be so hard!
+
+```
+update pibro.desktop to point at your instalation
+update pibro.sh to match your setup (I have a network mount that I included)
+copy scripts/pibro.desktop to ~/.config/autostart
+reboot your pi
+profit
+```
+
+# vlc is still freezing, WHY!!!?!
+Oh thats why! turns out vlc and the pi hates x-lib.
+
+# Oh cool now the usb drive randomly disconnects
+This sucks, it turns out the usb ports on the pi are not strong enough to handle a 2.5" external drive, I am now using folder sharing from a laptop and connecting via smb
+So far all good!
+
+# Now my schedule syncing is not working....
+I am relying on vlc to stop the video at a specific time..., this should lead to videos landing on 00:15, 00:30, or 1:00 marks. However, after a few hours we lose sync by a few minutes...
+I am not sure why. I need to parse the schedule files and see if I can find the issue... 
+
+# I aint using no stinkin cron
+I wanted to make this app universal, so I have decided to do the auto scheduler in code. It works!
