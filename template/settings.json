@@ -1,6 +1,5 @@
 {
     "station_name": "kwb",
-    "subtitles": true,
     "playlist_location": "./playlists/",
     "start_time": -1
 }

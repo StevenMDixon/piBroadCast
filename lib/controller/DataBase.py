@@ -32,7 +32,6 @@ class DataBase():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS station_config (
                 station_name TEXT,
-                subtitles INTEGER,
                 playlist_location TEXT,
                 playlist_file TEXT,
                 start_time INTEGER,

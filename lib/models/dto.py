@@ -24,7 +24,6 @@ class EpisodeData:
 @dataclass
 class StationConfig:
     station_name: str
-    subtitles: bool
     playlist_location: str
     playlist_file: str
     start_time: int
@@ -32,7 +31,6 @@ class StationConfig:
 
     def __iter__(self):
         yield self.station_name
-        yield self.subtitles
         yield self.playlist_location
         yield self.playlist_file
         yield self.start_time

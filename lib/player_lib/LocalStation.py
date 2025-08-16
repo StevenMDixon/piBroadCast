@@ -37,7 +37,6 @@ class LocalStation:
         except:
             return {
                     "station_name": "Error",
-                    "subtitles": False,
                     "playlist_location": "",
                     "start_time": -1
             }

@@ -21,7 +21,6 @@ class StreamStation:
         self.station_config = StationConfig(
             {
                 "station_name": station_config.get("station_name", "Stream Station"),
-                "subtitles": False,
                 "playlist_location": "",
                 "start_time": 0
             }

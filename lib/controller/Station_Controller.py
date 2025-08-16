@@ -29,6 +29,6 @@ class Station_Controller:
     def add_station_config(station_config):
         db = DataBase._get_conn()
         cursor = db.cursor()
-        cursor.execute("INSERT INTO station_config (station_name, subtitles, playlist_location, playlist_file, start_time) VALUES (?,?,?,?,?)", tuple(station_config))
+        cursor.execute("INSERT INTO station_config (station_name, playlist_location, playlist_file, start_time) VALUES (?,?,?,?)", tuple(station_config))
         db.commit()
         db.close()

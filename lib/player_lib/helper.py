@@ -10,7 +10,6 @@ def get_delta_time(self):
 class StationConfig():
     def __init__(self, station_config):
         self.station_name = station_config["station_name"]
-        self.subtitles = bool(station_config["subtitles"])
         self.play_list_location = station_config["playlist_location"]
         self.start_time = station_config["start_time"]
 
