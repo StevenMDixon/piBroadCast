@@ -7,14 +7,14 @@ station_bp = Blueprint('station', __name__, url_prefix='/station')
 
 @station_bp.route('/')
 
-def get_station_info():
+def get_station_info() -> jsonify:
     station_config_data = Station_Controller.get_current_station_config()
     station_config = StationConfig(*station_config_data) if station_config_data != None else None
-    return jsonify(station_config)
+    return jsonify(station_config), 200
 
 @station_bp.route('/set', methods=['POST'])
 
-def set_station_info():
+def set_station_info() -> None:
     station_config_data = request.json
     station_config = StationConfig(**station_config_data)
 

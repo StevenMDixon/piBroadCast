@@ -2,10 +2,11 @@ import os
 import json
 from datetime import datetime
 from .helper import M3u8Parser, StationConfig, PlayListItem
+from .station_interface import Station
 
 os.path.dirname(os.path.abspath(__file__))
 
-class StreamStation:
+class StreamStation(Station):
     def __init__(self, stream_url):
         
         self.playlist_start_index = 0
@@ -17,7 +18,7 @@ class StreamStation:
             PlayListItem(stream_url, 9999999, start_time_override = 0, end_time_override = 9999999)
         ]
 
-    def set_station_config(self, station_config):
+    def set_station_config(self, station_config) -> None:
         self.station_config = StationConfig(
             {
                 "station_name": station_config.get("station_name", "Stream Station"),
@@ -26,7 +27,8 @@ class StreamStation:
             }
         )
 
-    def data_changed(self):
+    def data_changed(self) -> bool:
         return False
 
-    
+    def setup_playlist_data(self) -> None:
+        return

@@ -12,32 +12,32 @@ class Window:
         self.current_player = None
         # self.root.bind("<KeyPress>", self.handleKeyPress)
 
-    def set_player(self, vlc_player):
+    def set_player(self, vlc_player) -> None:
         self.current_player = vlc_player
         self.setIDonPlayer()
         self.current_player.start()
         self.run()
 
-    def setWindowID(self):
+    def setWindowID(self) -> None:
         self.window_id = self.player_frame.winfo_id()
-    
-    def setIDonPlayer(self):
+
+    def setIDonPlayer(self) -> None:
         self.setWindowID()
         # If windows
         if os.name == 'nt': 
             self.current_player.getPlayer().set_hwnd(self.window_id)
         else:
             self.current_player.getPlayer().set_xwindow(self.window_id)
-    
-    def handleKeyPress(self, event):
+
+    def handleKeyPress(self, event) -> None:
          if self.current_player is not None:
             self.current_player.handleKeyPress(event.keycode)
 
-    def run_player_tasks(self):
+    def run_player_tasks(self) -> None:
          self.current_player.periodic_task()
          self.root.after(5000, self.run_player_tasks)
-    
-    def run(self):
+
+    def run(self) -> None:
         if self.current_player is not None:
              self.root.after(5000, self.run_player_tasks)
              

@@ -15,7 +15,7 @@ class Station_Controller:
         return converted
     
     @staticmethod
-    def get_current_station_config():
+    def get_current_station_config() -> StationConfig | None:
         db = DataBase._get_conn()
         cursor = db.cursor()
         cursor.execute(f"SELECT * FROM station_config ORDER BY id desc LIMIT 1")
@@ -26,7 +26,7 @@ class Station_Controller:
         return None
 
     @staticmethod
-    def add_station_config(station_config):
+    def add_station_config(station_config) -> None:
         db = DataBase._get_conn()
         cursor = db.cursor()
         cursor.execute("INSERT INTO station_config (station_name, playlist_location, playlist_file, start_time) VALUES (?,?,?,?)", tuple(station_config))

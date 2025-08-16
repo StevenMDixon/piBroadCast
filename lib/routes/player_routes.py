@@ -8,7 +8,7 @@ process = None
 
 @player_bp.route('/start')
 
-def start_player():
+def start_player() -> str:
     global process
     if process is None or process.poll() is not None:
         process = subprocess.Popen([sys.executable, "player_sub.py"])
@@ -18,7 +18,7 @@ def start_player():
     
 @player_bp.route('/stream', methods=['POST'])
 
-def start_stream():
+def start_stream() -> str:
     global process
     stream_data = request.json
     if process is None or process.poll() is not None:
@@ -30,12 +30,16 @@ def start_stream():
 
 @player_bp.route('/status')
 
-def get_player_status():
-    pass
+def get_player_status() -> str:
+    global process
+    if process is not None:
+        return 'Player is running'
+    else:
+        return 'No player is running'
 
 @player_bp.route('/kill')
 
-def kill_player():
+def kill_player() -> str:
     global process
     if process is not None:
         process = process.terminate()

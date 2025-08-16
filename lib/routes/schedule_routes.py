@@ -30,14 +30,14 @@ def set_schedule_template_from_file():
 
 @schedule_bp.route('/template/data', methods=['POST'])
 
-def set_schedule_template_from_data():
+def set_schedule_template_from_data() -> None:
     data = json.dumps(request.json)
     Schedule_Template_Controller.set_schedule_template(data.encode('utf-8'))
     return "", 200
 
 @schedule_bp.route('/template', methods=['GET'])
 
-def get_schedule_template():
+def get_schedule_template() -> tuple:
     data = Schedule_Template_Controller.get_current_schedule_template()
     print(data)
     decoded = json.loads(data.template_data.decode('utf-8'))
@@ -45,7 +45,7 @@ def get_schedule_template():
 
 @schedule_bp.route('/today', methods=['GET'])
 
-def get_todays_schedule():
+def get_todays_schedule() -> tuple:
     response = Schedule_Controller.get_todays_schedule(datetime.today().date())
     if response is not None:
         return jsonify(response), 200
@@ -53,33 +53,33 @@ def get_todays_schedule():
 
 @schedule_bp.route('/run/rebuild', methods=['GET'])
 
-def run_rebuild_schedule():
+def run_rebuild_schedule() -> str:
     run_scheduler("--Rebuild")
     return "Rebuilding schedule database", 200
 
 @schedule_bp.route('/run/build', methods=['GET'])
 
-def run_build_schedule():
+def run_build_schedule() -> str:
     run_scheduler("--Build")
     return "Building schedule database", 200
 
 @schedule_bp.route('/run/schedule', methods=['GET'])
 
-def run_create_schedule():
+def run_create_schedule() -> str:
     run_scheduler("--Schedule")
     return "Creating schedules", 200
 
 @schedule_bp.route('/run/auto', methods=['POST'])
-def run_auto():
+def run_auto() -> None:
     run_auto_schedule()
     return "", 204
 
 @schedule_bp.route('/run/auto_stop', methods=['POST'])
-def run_auto_stop():
+def run_auto_stop() -> None:
     stop_auto_scheduler()
     return "Stopping automatic scheduling", 200
 
 @schedule_bp.route('/delete', methods=['POST'])
-def run_delete_schedule():
+def run_delete_schedule() -> None:
     Schedule_Controller.delete_all_schedules()
     return "", 204

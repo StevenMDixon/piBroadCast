@@ -10,7 +10,7 @@ class VLCPlayer:
         self.instance = vlc.Instance(['--no-skip-frames', '--no-xlib', '--file-caching=5000','--network-caching=5000'])
         self.player = self.createListPlayer()
     
-    def createListPlayer(self): 
+    def createListPlayer(self) -> vlc.MediaListPlayer: 
         media_list = self.create_media_list(self.station)
        
         list_player = self.instance.media_list_player_new()
@@ -27,9 +27,9 @@ class VLCPlayer:
         # media_player_event_manager.event_attach(vlc.EventType.MediaPlayerPlaying, self.event_handler)
         # list_player_event_manager.event_attach(vlc.EventType.MediaListPlayerNextItemSet, self.event_handler)
 
-        return list_player 
-    
-    def create_media_list(self, station):
+        return list_player
+
+    def create_media_list(self, station) -> vlc.MediaList:
         media_list = self.instance.media_list_new()
 
         if self.station.start_ff_time < 0:
@@ -63,11 +63,11 @@ class VLCPlayer:
         media_list.add_media(self.instance.media_new('./signoff/color_bars.png'))
         
         return media_list
-    
-    def getPlayer(self):
+
+    def getPlayer(self) -> vlc.MediaPlayer:
         return self.player.get_media_player()
-            
-    def start(self):
+
+    def start(self) -> None:
         self.player.play()
 
     # def event_handler(self, event):
@@ -88,7 +88,7 @@ class VLCPlayer:
         # print(keypress)
         #return
 
-    def periodic_task(self):
+    def periodic_task(self) -> None:
         if self.station.data_changed():
             print("changing schedule")
             self.player.stop() 

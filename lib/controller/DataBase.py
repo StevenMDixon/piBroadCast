@@ -49,7 +49,7 @@ class DataBase():
 
         db.commit()
 
-    def _get_conn():
+    def _get_conn() -> sqlite3.Connection:
         return sqlite3.connect('my_local_database.db')
 
 

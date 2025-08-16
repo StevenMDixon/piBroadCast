@@ -1,6 +1,6 @@
 import datetime
 
-def get_delta_time(self):
+def get_delta_time(self) -> float:
         current_time = datetime.now()
         daily_start_time = datetime.now().replace(hour= self.station_config.start_time, minute=0, second=0)
         # Need to calculate the delta between these
@@ -27,7 +27,7 @@ class PlayListItem():
         self.duration = (self.end_time_override if self.end_time_override < duration else duration) - self.start_time_override
 
 class M3u8Parser():
-    def parsefile(m3u8Src):
+    def parsefile(m3u8Src) -> list[PlayListItem]:
         print(m3u8Src)
         myPlayList = list()
         try:
