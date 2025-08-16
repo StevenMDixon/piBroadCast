@@ -1,17 +1,23 @@
 {  
     "config": {
-        "bumpers": "./foldername",
-        "commercials": "./foldername",
+        "bumpers":  [
+            { "drive": "", "locations": ["/foldername1"] },
+            { "drive": "", "locations": ["/foldername2"] }
+        ],
+        "commercials": [
+            { "drive": "", "locations": ["/foldername1"] },
+            { "drive": "", "locations": ["/foldername2"] }
+        ],
         "drive_name": "",
         "schedule_items": [
-                {"name": "name1", "locations": ["/foldername1", "/foldername2"]},
-                {"name": "name2", "locations": ["/foldername"]},
-                {"name": "name3", "locations": ["/foldername"]},
-                {"name": "name4", "locations": ["/foldername"]},
-                {"name": "name5", "locations": ["/foldername"]},
-                {"name": "name6", "locations": ["/foldername"]},
-                {"name": "name7", "locations": ["/foldername"]},
-                {"name": "name8", "locations": ["/foldername"]}
+                {"drive": "", "name": "name1", "locations": ["/foldername1", "/foldername2"]},
+                {"drive": "", "name": "name2", "locations": ["/foldername"]},
+                {"drive": "", "name": "name3", "locations": ["/foldername"]},
+                {"drive": "", "name": "name4", "locations": ["/foldername"]},
+                {"drive": "", "name": "name5", "locations": ["/foldername"]},
+                {"drive": "", "name": "name6", "locations": ["/foldername"]},
+                {"drive": "", "name": "name7", "locations": ["/foldername"]},
+                {"drive": "", "name": "name8", "locations": ["/foldername"]}
             ]
     },
     "shedules": {

@@ -1,5 +1,5 @@
 from datetime import datetime
-from .helper import M3u8Parser
+from .helper import M3u8Parser, get_delta_time
 from lib.controller.Station_Controller import Station_Controller
 from lib.controller.Schedule_Controller import Schedule_Controller
 
@@ -47,7 +47,7 @@ class ServerStation:
         index = 0  
 
         if self.station_config.start_time > 0:
-            ff = self.get_delta_time()
+            ff = get_delta_time(self)
             print(ff)
 
         for item in self.playlist_data:
@@ -61,8 +61,4 @@ class ServerStation:
         self.start_ff_time = ff
                 
 
-    def get_delta_time(self):
-        current_time = datetime.now()
-        daily_start_time = datetime.now().replace(hour= self.station_config.start_time, minute=0, second=0)
-        # Need to calculate the delta between these
-        return current_time.timestamp() - daily_start_time.timestamp()
+    

@@ -2,4 +2,3 @@ python-vlc
 flask
 requests
 ffmpeg-python
-python-crontab

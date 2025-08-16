@@ -1,3 +1,11 @@
+import datetime
+
+def get_delta_time(self):
+        current_time = datetime.now()
+        daily_start_time = datetime.now().replace(hour= self.station_config.start_time, minute=0, second=0)
+        # Need to calculate the delta between these
+        return current_time.timestamp() - daily_start_time.timestamp()
+
 
 class StationConfig():
     def __init__(self, station_config):
@@ -33,14 +41,14 @@ class M3u8Parser():
                         break
                     start_time_override = 0
                     end_time_override = 0
-                    duration = int(metadata[0].split(':')[1])
+                    duration = float(metadata[0].split(':')[1])
 
                     for item in metadata:
                         if "#x-start:" in item:
-                            start_time_override = int(item.split(":")[1])
+                            start_time_override = float(item.split(":")[1])
 
                         if "#x-end:" in item:
-                            end_time_override = int(item.split(":")[1])
+                            end_time_override = float(item.split(":")[1])
 
                     path = file.readline().rstrip('\r\n')
 

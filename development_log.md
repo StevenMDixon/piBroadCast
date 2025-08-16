@@ -182,3 +182,19 @@ I am not sure why. I need to parse the schedule files and see if I can find the 
 
 # I aint using no stinkin cron
 I wanted to make this app universal, so I have decided to do the auto scheduler in code. It works!
+
+# STREEEEEAMING
+Added a stream player! 
+Here are some of my favorites!
+- https://swimrewind.com/
+- http://api.toonamiaftermath.com:3000/est/playlist.m3u8
+
+Basically any network streams vlc can handle can be used with pibroadcast!
+I think technically you could probably setup your own owncast setup and use it?
+
+# BUGS
+Every time I squash one another pops up.
+1. Killed a bug resulting in shows start times drifting. Turns out you cant just cut milliseconds off of shows and expect them to end correctly.
+2. Murderlated a bug that made it to where the first show would never start... Turns out negative time exists....
+
+# Why is it so hard to get swagger setup for flask...

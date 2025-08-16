@@ -1,7 +1,7 @@
 import os
 import json
 from datetime import datetime
-from .helper import M3u8Parser, StationConfig
+from .helper import M3u8Parser, StationConfig, get_delta_time
 
 os.path.dirname(os.path.abspath(__file__))
 
@@ -61,7 +61,7 @@ class LocalStation:
         index = 0  
 
         if self.station_config.start_time > 0:
-            ff = self.get_delta_time()
+            ff = get_delta_time(self)
 
         for item in self.playlist_data:
             if ff > item.duration:

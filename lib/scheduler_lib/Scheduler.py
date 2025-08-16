@@ -74,12 +74,16 @@ class Scheduler():
                  ready_to_insert += self.convert_to_episode_dto(show, shows[show])
 
             if self.schedule_template_data['config']['commercials']:
-                 commercials = VideoLoader.load_commercials(self.schedule_template_data['config'])
-                 ready_to_insert += self.convert_to_episode_dto('commercial', commercials)
+                commercial_locations = self.schedule_template_data['config']['commercials']
+                for location_data in commercial_locations:
+                    commercials = VideoLoader.load_commercials(self.schedule_template_data['config'], location_data)
+                    ready_to_insert += self.convert_to_episode_dto('commercial', commercials)
 
+                
             if self.schedule_template_data['config']['bumpers']:
-                 bumpers = VideoLoader.load_bumpers(self.schedule_template_data['config'])
-                 ready_to_insert += self.convert_to_episode_dto('bumper', bumpers)
+                 for location_data in self.schedule_template_data['config']['bumpers']:
+                    bumpers = VideoLoader.load_bumpers(self.schedule_template_data['config'], location_data)
+                    ready_to_insert += self.convert_to_episode_dto('bumper', bumpers)
 
             Episode_Controller.insert_episodes(ready_to_insert)
             print(f"Shows and episodes added to db: {len(ready_to_insert)}. Run --Schedule to build playlists")

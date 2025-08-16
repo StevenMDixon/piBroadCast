@@ -1,3 +1,4 @@
+from datetime import datetime
 import vlc
 
 event_types = []
@@ -14,20 +15,25 @@ class VLCPlayer:
        
         list_player = self.instance.media_list_player_new()
         media_player = self.instance.media_player_new()
-        # media_player.video_set_aspect_ratio("4:3")
-        # media_player.video_set_crop_geometry("680x480+0+0")
-        # media_player.video_set_scale(2.5)
+        media_player.video_set_aspect_ratio("4:3")
+        
 
         list_player.set_media_player(media_player)
         list_player.set_media_list(media_list)
 
-        return list_player
+        # list_player_event_manager = list_player.event_manager()
+        # media_player_event_manager = media_player.event_manager()
+
+        # media_player_event_manager.event_attach(vlc.EventType.MediaPlayerPlaying, self.event_handler)
+        # list_player_event_manager.event_attach(vlc.EventType.MediaListPlayerNextItemSet, self.event_handler)
+
+        return list_player 
     
     def create_media_list(self, station):
         media_list = self.instance.media_list_new()
 
         if self.station.start_ff_time < 0:
-            pre_schedule_media = self.instance.media_new('./signoff/color_bars.png', f':image-duration={station.start_ff_time * 1000}')
+            pre_schedule_media = self.instance.media_new('./signoff/standby.jpg', f':image-duration={station.start_ff_time * -1}')
             media_list.add_media(pre_schedule_media)
             self.station.start_ff_time = 0
 
@@ -63,6 +69,13 @@ class VLCPlayer:
             
     def start(self):
         self.player.play()
+
+    # def event_handler(self, event):
+    #     print(f"Event: {event.type}")
+    #     if event.type == vlc.EventType.MediaListPlayerNextItemSet:
+    #         print(self.player.get_media_player().get_length())
+    #     if event.type == vlc.EventType.MediaPlayerPlaying:
+    #         print(self.player.get_media_player().get_length())
 
     #implemented in window to pass key presses to the player
     #def handleKeyPress(self, keypress):

@@ -16,6 +16,18 @@ def start_player():
     else:
         return 'Player is already playing'
     
+@player_bp.route('/stream', methods=['POST'])
+
+def start_stream():
+    global process
+    stream_data = request.json
+    if process is None or process.poll() is not None:
+        process = subprocess.Popen([sys.executable, "player_sub.py", f"{stream_data['url']}"])
+        return 'Running Player'
+    else:
+        return 'Player is already playing'
+
+
 @player_bp.route('/status')
 
 def get_player_status():
