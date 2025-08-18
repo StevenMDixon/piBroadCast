@@ -2,11 +2,11 @@ import os
 import json
 from datetime import datetime
 from .helper import M3u8Parser, StationConfig, PlayListItem
-from .station_interface import Station
+from lib.player_lib.StationInterface import IStation
 
 os.path.dirname(os.path.abspath(__file__))
 
-class StreamStation(Station):
+class StreamStation(IStation):
     def __init__(self, stream_url):
         
         self.playlist_start_index = 0

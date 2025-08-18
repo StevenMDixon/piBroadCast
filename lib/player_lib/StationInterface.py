@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Station(ABC):
+class IStation(ABC):
         @abstractmethod
         def data_changed(self) -> bool:
             pass

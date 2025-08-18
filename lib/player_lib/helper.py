@@ -1,8 +1,8 @@
-import datetime
+from datetime import datetime
 
-def get_delta_time(self) -> float:
+def get_delta_time(start_time) -> float:
         current_time = datetime.now()
-        daily_start_time = datetime.now().replace(hour= self.station_config.start_time, minute=0, second=0)
+        daily_start_time = datetime.now().replace(hour= start_time, minute=0, second=0)
         # Need to calculate the delta between these
         return current_time.timestamp() - daily_start_time.timestamp()
 

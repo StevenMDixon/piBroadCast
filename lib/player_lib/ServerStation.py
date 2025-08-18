@@ -1,8 +1,8 @@
-from datetime import datetime
+
 from .helper import M3u8Parser, get_delta_time
 from lib.controller.Station_Controller import Station_Controller
 from lib.controller.Schedule_Controller import Schedule_Controller
-from .station_interface import Station
+from lib.player_lib.StationInterface import Station
 
 class ServerStation(Station):
     def __init__(self):
@@ -47,8 +47,7 @@ class ServerStation(Station):
         index = 0  
 
         if self.station_config.start_time > 0:
-            ff = get_delta_time(self)
-            print(ff)
+            ff = get_delta_time(self.station_config.start_time)
 
         for item in self.playlist_data:
             if ff > item.duration:
