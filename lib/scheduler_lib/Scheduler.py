@@ -8,7 +8,7 @@ from lib.controller.Episode_Controller import Episode_Controller
 from lib.controller.Schedule_Controller import Schedule_Controller
 from lib.controller.Schedule_Template_Controller import Schedule_Template_Controller
 from lib.controller.Station_Controller import Station_Controller
-from lib.models.dto import ScheduleTemplateData, ScheduleData, StationConfig, EpisodeData
+from lib.models.dto import ScheduleTemplateData, ScheduleData, EpisodeData
 from lib.scheduler_lib.VideoLoader import VideoLoader
 import random
 
@@ -91,7 +91,7 @@ class Scheduler():
         def convert_to_episode_dto(self, show, episodes):
             converted = []
             for episode in episodes:
-                converted.append(EpisodeData(show, episode['name'], episode['path'], episode['duration'], episode['media_type'], 0, episode['bumper_data']))
+                converted.append(EpisodeData(show, episode['name'], episode['path'], episode['duration'], episode['media_type'], 0, episode['tags']))
 
             return converted
 
@@ -101,12 +101,11 @@ class Scheduler():
             self.most_recent_schedule = Schedule_Controller.get_lastest_schedule()
 
             if self.most_recent_schedule is not None:
-                print(self.most_recent_schedule)
                 self.start_scheduling_date = datetime.strptime(ScheduleData(*self.most_recent_schedule).schedule_date, "%Y-%m-%d").date()
                 days_to_add = 1
 
             do_scheduling = True
-            today = date(2025, 8, 28)
+            today = datetime.today().date()
     
             if (today - self.start_scheduling_date).days < 0:
                 do_scheduling = False
@@ -121,23 +120,29 @@ class Scheduler():
             current_date = self.start_scheduling_date + timedelta(days_to_add)
             end_date = current_date + timedelta(days = 8)
 
-            schedules = self.schedule_template_data['shedules']
+            schedules = self.schedule_template_data['schedules']
+            block_timings = []
+
+            if 'schedule_blocks' in self.schedule_template_data['config']:
+                block_timings = sorted(self.schedule_template_data['config']['schedule_blocks'], key=lambda x: x['start_time'], reverse=True)
 
             while current_date < end_date:
-                self.create_days_schedule(schedules, current_date)
+                self.create_days_schedule(schedules, current_date, block_timings)
                 current_date += timedelta(days=1)
 
-        def create_days_schedule(self, schedules, date_to_schedule):
+        def create_days_schedule(self, schedules, date_to_schedule, block_timings):
             stored_played_ids = []
 
             todays_name = calendar.day_name[date_to_schedule.weekday()]
             todays_schedule = schedules[todays_name] if todays_name  in schedules else schedules["default"] 
 
             schedule_stack = []
+            current_time = 0
 
             for template_block in todays_schedule:
-                block = self.schedule_block(template_block["duration"], template_block["show_name"], stored_played_ids)
+                block = self.schedule_block(template_block["duration"], template_block["show_name"], stored_played_ids, block_timings, current_time)
                 schedule_stack += block
+                current_time += template_block["duration"]
                 #update the played shows
                 Episode_Controller.increment_played_count(list(map(lambda x: x.episode_data.id, block)))
 
@@ -148,13 +153,12 @@ class Scheduler():
             Schedule_Controller.add_schedule(file_info)
 
 
-        def schedule_block(self, duration, show_name, played) -> list[BlockItem]:
+        def schedule_block(self, duration, show_name, played, block_timings, current_time) -> list[BlockItem]:
             episodes = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('show', show_name, played)
-            commercials = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('commercial', 'commercial', [])
-            bumpers = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('bumper', 'bumper', [])
 
             fill_episode_duration = duration * 60
-            block = []
+            current_block = []
+            local_current_time = current_time
 
             while fill_episode_duration > 0:
                 test = list(filter(lambda x: x.id not in played, episodes))
@@ -165,17 +169,39 @@ class Scheduler():
 
                 print(f"chosen episode {chosen_episode.episode_name} length {chosen_episode.episode_length} min {episode_length_min} fill time {fill_episode_duration}")
 
-                block.append(BlockItem(chosen_episode, 0, chosen_episode.episode_length))
+                current_block.append(BlockItem(chosen_episode, 0, chosen_episode.episode_length))
 
-                block += self.fill_commercials_bumpers(episode_length_min - chosen_episode.episode_length, commercials, bumpers)
+                current_timing_block = self.get_block_timing(local_current_time, block_timings)
+
+                current_block += self.fill_commercials_bumpers(episode_length_min - chosen_episode.episode_length, current_timing_block)
 
                 played.append(chosen_episode.id)
 
+                local_current_time += episode_length_min / 60
+              
                 fill_episode_duration -= episode_length_min
 
-            return block
+            return current_block
+
+        def get_block_timing(self, current_time, block_timings):
+            if not block_timings:
+                return ""
             
-        def fill_commercials_bumpers(self, remaining_time, commercials, bumpers) -> list[BlockItem]:
+            index = 0
+
+            while current_time < block_timings[index]["start_time"]:
+                index += 1
+
+            if index >= len(block_timings):
+                 return ""
+
+            return block_timings[index]["name"]
+
+
+        def fill_commercials_bumpers(self, remaining_time, time_block_name) -> list[BlockItem]:
+            commercials = Episode_Controller.get_all_commercials_by_tag(time_block_name)
+            bumpers = Episode_Controller.get_all_bumpers_by_tag(time_block_name)
+
             bumper1 = random.choice(bumpers)
             bumper2 = random.choice(bumpers)
 
@@ -191,6 +217,7 @@ class Scheduler():
 
                 offset = 0
                 if remaining_time < 0:
+                     print(f"clipping: {selected_commercial.episode_name} {selected_commercial.episode_length} to fit remaining time {remaining_time}")
                      offset = remaining_time
 
                 selected_commercials.append(BlockItem(selected_commercial, 0, selected_commercial.episode_length + offset))

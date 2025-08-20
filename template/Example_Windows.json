@@ -1,7 +1,13 @@
 {  
     "config": {
-        "bumpers": [{"locations": ["/bumpers"]}],
-        "commercials": [{"locations": ["/commercials"]}],
+        "bumpers":[
+            { "drive": "", "locations": ["/bumpers/test1"], "tags": "Block1" },
+            { "drive": "", "locations": ["/bumpers/test2"], "tags": "Block2" }
+        ],
+        "commercials": [
+            { "drive": "", "locations": ["/commercials/test1"], "tags": "Block1" },
+            { "drive": "", "locations": ["/commercials/test2"], "tags": "Block2" }
+        ],
         "drive_name": "E:",
         "schedule_items": [
                 {"name": "AAAHH REAL MONSTERS", "locations": ["/nick/AAAHH REAL MONSTERS/Season 1"]},
@@ -23,9 +29,13 @@
                 {"name": "The Fairly Oddparents", "locations": ["/nick/The Fairly Oddparents/"]},
                 {"name": "THE WILD THORNBERRYS", "locations": ["/nick/THE WILD THORNBERRYS/Season 1"]},
                 {"name": "Weinerville", "locations": ["/nick/Weinerville/Episodes"]}
+        ],
+        "schedule_blocks" : [
+           { "name": "Block 1" , "start_time": 0},
+           { "name": "Block 2" , "start_time": 360}
         ]
     },
-    "shedules": {
+    "schedules": {
         "default" : [
             {"show_name": "Blues Clues", "duration": 60},
             {"show_name": "CatDog", "duration": 30},

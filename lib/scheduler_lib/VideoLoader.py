@@ -6,7 +6,7 @@ video_extensions = ('.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm', '.m
 
 class VideoLoader:
     @staticmethod
-    def _search_for_videos(target_directory, type):
+    def _search_for_videos(target_directory, type, tags = ""):
             video_files = []
 
             for root, _, files in os.walk(target_directory):
@@ -15,7 +15,7 @@ class VideoLoader:
                         full_path = os.path.join(root, file)
                         
                         duration = float(ffmpeg.probe(full_path)["format"]["duration"])
-                        video_files.append({'path': 'file:' + pathname2url(full_path), 'name': file, 'duration': duration, 'media_type': type, 'bumper_data': ''})
+                        video_files.append({'path': 'file:' + pathname2url(full_path), 'name': file, 'duration': duration, 'media_type': type, 'tags': tags})
 
             return video_files
     
@@ -52,14 +52,18 @@ class VideoLoader:
     @staticmethod
     def load_commercials(schedule_template_data, commercial_location):
         drive_name = schedule_template_data['drive_name']
+        tags = ""
 
         if "drive" in commercial_location:
             drive_name = commercial_location["drive"] if commercial_location["drive"] != "" else drive_name
 
+        if "tags" in commercial_location:
+            tags = commercial_location["tags"]
+
         commercials = []
 
         for location in commercial_location["locations"]:
-            commercials += VideoLoader._search_for_videos(drive_name + location, "commercial")
+            commercials += VideoLoader._search_for_videos(drive_name + location, "commercial", tags)
 
         print(f"Found {len(commercials)} commercials in {drive_name}")
         return commercials
@@ -67,14 +71,18 @@ class VideoLoader:
     @staticmethod
     def load_bumpers(schedule_template_data, bumper_location):
          drive_name = schedule_template_data['drive_name']
+         tags = ""
 
          if "drive" in bumper_location:
              drive_name = bumper_location["drive"] if bumper_location["drive"] != "" else drive_name
 
+         if "tags" in bumper_location:
+             tags = bumper_location["tags"]
+
          bumpers = []
 
          for location in bumper_location["locations"]:
-             bumpers += VideoLoader._search_for_videos(drive_name + location, "bumper")
+             bumpers += VideoLoader._search_for_videos(drive_name + location, "bumper", tags)
 
          print(f"Found {len(bumpers)} bumpers in {drive_name}")
          return bumpers

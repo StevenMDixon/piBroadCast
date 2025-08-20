@@ -24,7 +24,7 @@ class DataBase():
                 episode_length INTEGER,
                 media_type TEXT,
                 play_count INTEGER,
-                bumper_data TEXT,
+                tags TEXT,
                 id INTEGER PRIMARY KEY
             )
         ''')

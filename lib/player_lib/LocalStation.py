@@ -1,7 +1,7 @@
 import os
 import json
 from datetime import datetime
-from .helper import M3u8Parser, StationConfig, get_delta_time
+from .helper import M3u8Parser, StationConfig, get_timing_data
 from lib.player_lib.StationInterface import  IStation
 
 os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +20,9 @@ class LocalStation(IStation):
         self.station_config = StationConfig(station_config)
         self.set_playlist_file()
         self.setup_playlist_data()
-        self.set_timing()
+        timing_data = get_timing_data(self.station_config.start_time, self.playlist_data)
+        self.playlist_start_index = timing_data["index"]
+        self.start_ff_time = timing_data["start"]
 
     def data_changed(self) -> bool:
         return False
@@ -54,20 +56,3 @@ class LocalStation(IStation):
             self.station_config.playlist_file =  self.station_config.play_list_location + 'default.m3u8'
         except:
             return
-
-    def set_timing(self) -> None:
-        ff = 0
-        index = 0  
-
-        if self.station_config.start_time > 0:
-            ff = get_delta_time(self.station_config.start_time)
-
-        for item in self.playlist_data:
-            if ff > item.duration:
-                ff -= item.duration
-                index += 1
-            else:
-                break
-
-        self.playlist_start_index = index
-        self.start_ff_time = ff

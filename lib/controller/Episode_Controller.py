@@ -54,6 +54,33 @@ class Episode_Controller:
 
         cursor.execute(sql, params)
         return Episode_Controller._convert_list(cursor.fetchall())
+    
+    @staticmethod
+    def get_all_commercials_by_tag(tag) -> list[EpisodeData]:
+        db = DataBase._get_conn()
+        cursor = db.cursor()
+        type = 'commercial'
+
+        where_clause = f"AND (tags like '%{tag}%' or tags = '')" if tag != "" else ""
+
+        sql =  f"SELECT * FROM episode_metadata where media_type = '{type}' {where_clause} ORDER BY play_count ASC LIMIT 20"
+      
+        cursor.execute(sql)
+        return Episode_Controller._convert_list(cursor.fetchall())
+    
+    @staticmethod
+    def get_all_bumpers_by_tag(tag) -> list[EpisodeData]:
+        db = DataBase._get_conn()
+        cursor = db.cursor()
+        type = 'bumper'
+
+        where_clause = f"AND (tags like '%{tag}%' or tags = '')" if tag != "" else ""
+
+        sql =  f"SELECT * FROM episode_metadata where media_type = '{type}' {where_clause} ORDER BY play_count ASC LIMIT 20"
+      
+        cursor.execute(sql)
+        return Episode_Controller._convert_list(cursor.fetchall())
+
 
     @staticmethod
     def delete_all_episode_metadata() -> None: 
@@ -68,7 +95,7 @@ class Episode_Controller:
         db = DataBase._get_conn()
         cursor = db.cursor()
         prepared = [tuple(episode) for episode in episodes]
-        cursor.executemany("insert into episode_metadata (show_name, episode_name, episode_location, episode_length, media_type, play_count, bumper_data) values (?,?,?,?,?,?,?)", prepared)
+        cursor.executemany("insert into episode_metadata (show_name, episode_name, episode_location, episode_length, media_type, play_count, tags) values (?,?,?,?,?,?,?)", prepared)
         db.commit()
         db.close()
 

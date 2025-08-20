@@ -1,10 +1,11 @@
 
-from .helper import M3u8Parser, get_delta_time
+from .helper import M3u8Parser, get_timing_data
+from datetime import datetime
 from lib.controller.Station_Controller import Station_Controller
 from lib.controller.Schedule_Controller import Schedule_Controller
-from lib.player_lib.StationInterface import Station
+from lib.player_lib.StationInterface import IStation
 
-class ServerStation(Station):
+class ServerStation(IStation):
     def __init__(self):
         self.playlist_data = []
 
@@ -30,7 +31,9 @@ class ServerStation(Station):
             self.playlist = todays_schedule.schedule_file_name
 
             self.setup_playlist_data()
-            self.set_timing()
+            timing_data = get_timing_data(self.station_config.start_time, self.playlist_data)
+            self.playlist_start_index = timing_data["index"]
+            self.start_ff_time = timing_data["start"]
             return True
         else:
             return False
@@ -41,23 +44,5 @@ class ServerStation(Station):
 
     def load_station_config(self) -> None:
         self.station_config = Station_Controller.get_current_station_config()
-
-    def set_timing(self):
-        ff = 0
-        index = 0  
-
-        if self.station_config.start_time > 0:
-            ff = get_delta_time(self.station_config.start_time)
-
-        for item in self.playlist_data:
-            if ff > item.duration:
-                ff -= item.duration
-                index += 1
-            else:
-                break
-
-        self.playlist_start_index = index
-        self.start_ff_time = ff
-                
 
     

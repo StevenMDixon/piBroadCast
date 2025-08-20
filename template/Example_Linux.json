@@ -23,9 +23,13 @@
                 {"name": "The Fairly Oddparents", "locations": ["/nick/The Fairly Oddparents/"]},
                 {"name": "THE WILD THORNBERRYS", "locations": ["/nick/THE WILD THORNBERRYS/Season 1"]},
                 {"name": "Weinerville", "locations": ["/nick/Weinerville/Episodes"]}
+        ],
+        "schedule_blocks" : [
+           { "name": "Block 1" , "start_time": 0},
+           { "name": "Block 2" , "start_time": 360}
         ]
     },
-    "shedules": {
+    "schedules": {
         "default" : [
             {"show_name": "Blues Clues", "duration": 60},
             {"show_name": "CatDog", "duration": 30},

@@ -8,7 +8,7 @@ class EpisodeData:
     episode_length: int
     media_type: str
     play_count: int = 0
-    bumper_data: str = ""
+    tags: str = ""
     id: int = 0
 
     def __iter__(self):
@@ -18,7 +18,7 @@ class EpisodeData:
         yield self.episode_length
         yield self.media_type
         yield self.play_count
-        yield self.bumper_data
+        yield self.tags
 
 
 @dataclass

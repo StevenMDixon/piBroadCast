@@ -1,0 +1,83 @@
+{  
+    "config": {
+        "bumpers": [
+            {"locations": ["/bumpers"], "tags": "Nick"},
+            {"locations": ["/nick_jr_bumpers"], "tags": "Nick_JR"}
+        ],
+        "commercials": [
+            {"locations": ["/commercials/toys/"], "tags": ""},
+            {"locations": ["/commercials/food/"], "tags": ""},
+            {"locations": ["/commercials/magazine/"], "tags": ""},
+            {"locations": ["/commercials/restaurants/"], "tags": ""},
+            {"locations": ["/commercials/Nick/"], "tags": "Nick"},
+            {"locations": ["/commercials/video games/"], "tags": "Nick"},
+            {"locations": ["/commercials/movie trailer/g/"], "tags": "Nick"},
+            {"locations": ["/commercials/places/"], "tags": "Nick"},
+            {"locations": ["/commercials/products/"], "tags": "Nick"},
+            {"locations": ["/commercials/cars/"], "tags": "Nick"}
+        ],
+        "drive_name": "///home/piratestation/nick",
+        "schedule_items": [
+            {"name": "Blues Clues", "locations": ["/nick_jr/Blues Clues/"]},
+            {"name": "Allegra's Window", "locations": ["/nick_jr/Allegra's Window/"]},
+            {"name": "Go Diego Go", "locations": ["/nick/Go Diego Go/"]},
+            {"name": "Weinerville", "locations": ["/nick_jr/Weinerville/Episodes"]},
+            {"name": "Richard Scarrys Busy Town", "locations": ["/nick_jr/Richard Scarrys Busy Town/"]},
+            {"name": "Bob The Builder", "locations": ["/nick_jr/Bob The Builder/"]},
+            {"name": "Dora the Explorer", "locations": ["/nick_jr/Dora The Explorer/"]},
+            {"name": "Franklin", "locations": ["/nick_jr/Franklin/"]},
+            {"name": "Little Bear", "locations": ["/nick_jr/Little Bear/"]},
+            {"name": "Oswald", "locations": ["/nick_jr/Oswald/"]},
+            {"name": "Thomas The Tank Engine and Friends", "locations": ["/nick_jr/Thomas The Tank Engine and Friends/"]},
+            {"name": "AAAHH REAL MONSTERS", "locations": ["/nick/AAAHH REAL MONSTERS/"]},
+            {"name": "Avatar The Last Airbender", "locations": ["/nick/Avatar The Last Airbender/"]},
+            {"name": "CatDog", "locations": ["/nick/CatDog/"]},
+            {"name": "Chalkzone", "locations": ["/nick/Chalkzone/"]},
+            {"name": "DANNY PHANTOM", "locations": ["/nick/DANNY PHANTOM/"]},
+            {"name": "HEY ARNOLD", "locations": ["/nick/HEY ARNOLD/"]},
+            {"name": "Invader_Zim", "locations": ["/nick/Invader_Zim/"]},
+            {"name": "JIMMY NEUTRON", "locations": ["/nick/JIMMY NEUTRON/"]},
+            {"name": "Rocket Power", "locations": ["/nick/Rocket Power/"]},
+            {"name": "Rugrats", "locations": ["/nick/Rugrats/"]},
+            {"name": "Spongebob", "locations": ["/nick/Spongebob/"]},
+            {"name": "Teenage Mutant NINJA TURTLES", "locations": ["/nick/Teenage Mutant NINJA TURTLES/"]},
+            {"name": "The Angry Beavers", "locations": ["/nick/The Angry Beavers/"]},
+            {"name": "The Fairly Oddparents", "locations": ["/nick/The Fairly Oddparents/"]},
+            {"name": "THE WILD THORNBERRYS", "locations": ["/nick/THE WILD THORNBERRYS/"]}
+        ],
+        "schedule_blocks" : [
+           { "name": "Nick_JR" , "start_time": 0},
+           { "name": "Nick" , "start_time": 330}
+        ]
+    },
+    "schedules": {
+        "default" : [
+            {"show_name": "Richard Scarrys Busy Town", "duration": 30},
+            {"show_name": "Blues Clues", "duration": 30},
+            {"show_name": "Franklin", "duration": 30},
+            {"show_name": "Go Diego Go", "duration": 30},
+            {"show_name": "Little Bear", "duration": 30},
+            {"show_name": "Oswald", "duration": 30},
+            {"show_name": "Thomas The Tank Engine and Friends", "duration": 30},
+            {"show_name": "Bob The Builder", "duration": 30},
+            {"show_name": "Allegra's Window", "duration": 30},
+            {"show_name": "Dora the Explorer", "duration": 30},
+            {"show_name": "Weinerville", "duration": 30},
+            {"show_name": "Chalkzone", "duration": 30},
+            {"show_name": "JIMMY NEUTRON", "duration": 30},
+            {"show_name": "CatDog", "duration": 30},
+            {"show_name": "THE WILD THORNBERRYS", "duration": 30},
+            {"show_name": "HEY ARNOLD", "duration": 30},
+            {"show_name": "Rugrats", "duration": 30},
+            {"show_name": "Spongebob", "duration": 30},
+            {"show_name": "Rocket Power", "duration": 30},
+            {"show_name": "The Fairly Oddparents", "duration": 30},
+            {"show_name": "The Angry Beavers", "duration": 30},
+            {"show_name": "Avatar The Last Airbender", "duration": 30},
+            {"show_name": "AAAHH REAL MONSTERS", "duration": 30},
+            {"show_name": "DANNY PHANTOM", "duration": 30},
+            {"show_name": "Invader_Zim", "duration": 30},
+            {"show_name": "Teenage Mutant NINJA TURTLES", "duration": 30}
+        ]
+    }
+}

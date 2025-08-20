@@ -1,12 +1,12 @@
 {  
     "config": {
         "bumpers":  [
-            { "drive": "", "locations": ["/foldername1"] },
-            { "drive": "", "locations": ["/foldername2"] }
+            { "drive": "", "locations": ["/foldername1"], "tags": "Block1, Block2" },
+            { "drive": "", "locations": ["/foldername2"], "tags": "Block2" }
         ],
         "commercials": [
-            { "drive": "", "locations": ["/foldername1"] },
-            { "drive": "", "locations": ["/foldername2"] }
+            { "drive": "", "locations": ["/foldername1"], "tags": "Block1" },
+            { "drive": "", "locations": ["/foldername2"], "tags": "" }
         ],
         "drive_name": "",
         "schedule_items": [
@@ -18,18 +18,20 @@
                 {"drive": "", "name": "name6", "locations": ["/foldername"]},
                 {"drive": "", "name": "name7", "locations": ["/foldername"]},
                 {"drive": "", "name": "name8", "locations": ["/foldername"]}
-            ]
+            ],
+        "schedule_blocks" : [
+           { "name": "Block 1" , "start_time": 0},
+           { "name": "Block 2" , "start_time": 360}
+        ]
     },
-    "shedules": {
+    "schedules": {
         "default" : {
-            "schedule": {
-                "name1": {"duration": 60},
-                "name2": {"duration": 60},
-                "name3": {"duration": 60},
-                "name4": {"duration": 60},
-                "name5": {"duration": 60},
-                "name6": {"duration": 60}
-            }
+            "schedule": [
+                {"show_name": "name1", "duration": 60},
+                {"show_name": "name4", "duration": 30},
+                {"show_name": "name2", "duration": 60},
+                {"show_name": "name3", "duration": 60}
+            ]
         },
         "saturday" : {},
         "sunday" : {}
