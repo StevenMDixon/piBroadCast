@@ -20,7 +20,7 @@
         "schedule_items": [
             {"name": "Blues Clues", "locations": ["/nick_jr/Blues Clues/"]},
             {"name": "Allegra's Window", "locations": ["/nick_jr/Allegra's Window/"]},
-            {"name": "Go Diego Go", "locations": ["/nick/Go Diego Go/"]},
+            {"name": "Go Diego Go", "locations": ["/nick_jr/Go Diego Go/"]},
             {"name": "Weinerville", "locations": ["/nick_jr/Weinerville/Episodes"]},
             {"name": "Richard Scarrys Busy Town", "locations": ["/nick_jr/Richard Scarrys Busy Town/"]},
             {"name": "Bob The Builder", "locations": ["/nick_jr/Bob The Builder/"]},

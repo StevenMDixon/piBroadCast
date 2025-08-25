@@ -8,8 +8,23 @@ class VLCPlayer:
         self.station = station
         # Options ['--file-caching=5000', '--network-caching=10000', '--verbose=3']
         self.instance = vlc.Instance(['--no-skip-frames', '--no-xlib', '--file-caching=5000','--network-caching=5000'])
-        self.player = self.createListPlayer()
-    
+
+        if len(self.station.playlist_data) > 1:
+            self.player = self.createListPlayer()
+        else:
+            self.player = self.createSinglePlayer()
+
+    def createSinglePlayer(self) -> vlc.MediaPlayer:
+        media = self.instance.media_new(self.station.playlist_data[0].path)
+        # Turn off hardware accelerated decoding as it causes some issues with videos on the rpi,
+        media.add_option(":avcodec-hw=none")
+
+        player = self.instance.media_player_new()
+        player.set_media(media)
+        player.video_set_aspect_ratio("4:3")
+
+        return player
+
     def createListPlayer(self) -> vlc.MediaListPlayer: 
         media_list = self.create_media_list(self.station)
        
@@ -54,8 +69,7 @@ class VLCPlayer:
             media.add_option(f"stop-time={playlistitem.end_time_override}")
 
             # Turn off hardware accelerated decoding as it causes some issues with videos on the rpi,
-            # Turning it back on because of some info I found online.
-            # media.add_option(":avcodec-hw=none")
+            media.add_option(":avcodec-hw=none")
 
             media_list.add_media(media)
 
@@ -65,6 +79,9 @@ class VLCPlayer:
         return media_list
 
     def getPlayer(self) -> vlc.MediaPlayer:
+        if getattr(self.player, 'get_media_player', None) is None:
+            return self.player
+        
         return self.player.get_media_player()
 
     def start(self) -> None:

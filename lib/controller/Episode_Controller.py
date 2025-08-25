@@ -63,8 +63,8 @@ class Episode_Controller:
 
         where_clause = f"AND (tags like '%{tag}%' or tags = '')" if tag != "" else ""
 
-        sql =  f"SELECT * FROM episode_metadata where media_type = '{type}' {where_clause} ORDER BY play_count ASC LIMIT 20"
-      
+        sql =  f"SELECT * FROM episode_metadata where media_type = '{type}' {where_clause} ORDER BY RANDOM() LIMIT 100"
+
         cursor.execute(sql)
         return Episode_Controller._convert_list(cursor.fetchall())
     
@@ -76,8 +76,8 @@ class Episode_Controller:
 
         where_clause = f"AND (tags like '%{tag}%' or tags = '')" if tag != "" else ""
 
-        sql =  f"SELECT * FROM episode_metadata where media_type = '{type}' {where_clause} ORDER BY play_count ASC LIMIT 20"
-      
+        sql =  f"SELECT * FROM episode_metadata where media_type = '{type}' {where_clause} ORDER BY RANDOM() LIMIT 100"
+
         cursor.execute(sql)
         return Episode_Controller._convert_list(cursor.fetchall())
 
