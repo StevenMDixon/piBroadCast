@@ -25,6 +25,7 @@ class DataBase():
                 media_type TEXT,
                 play_count INTEGER,
                 tags TEXT,
+                mean_vol INTEGER,
                 id INTEGER PRIMARY KEY
             )
         ''')

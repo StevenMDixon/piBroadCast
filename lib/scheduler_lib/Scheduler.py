@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta
 import calendar
 from dataclasses import dataclass
 import math
+from tkinter.filedialog import test
 from lib.controller.Episode_Controller import Episode_Controller
 from lib.controller.Schedule_Controller import Schedule_Controller
 from lib.controller.Schedule_Template_Controller import Schedule_Template_Controller
@@ -17,6 +18,7 @@ class BlockItem:
         episode_data: EpisodeData
         start_time: int
         end_time: int
+        mean_volume: float = 0.0
 
 class Scheduler():
         def __init__(self, command = ""):
@@ -91,7 +93,8 @@ class Scheduler():
         def convert_to_episode_dto(self, show, episodes):
             converted = []
             for episode in episodes:
-                converted.append(EpisodeData(show, episode['name'], episode['path'], episode['duration'], episode['media_type'], 0, episode['tags']))
+                print(episode)
+                converted.append(EpisodeData(show, episode['name'], episode['path'], episode['duration'], episode['media_type'], 0, episode['tags'], episode['mean_vol']))
 
             return converted
 
@@ -154,22 +157,25 @@ class Scheduler():
 
 
         def schedule_block(self, duration, show_name, played, block_timings, current_time) -> list[BlockItem]:
-            episodes = Episode_Controller.get_all_episode_metadata_by_type_by_lowest_play_count('show', show_name, played)
 
             fill_episode_duration = duration * 60
             current_block = []
             local_current_time = current_time
 
             while fill_episode_duration > 0:
-                test = list(filter(lambda x: x.id not in played, episodes))
+                episodes = Episode_Controller.get_all_show_episodes_by_show_name_and_duration(show_name, played, fill_episode_duration)
 
-                chosen_episode =  random.choice(test)
+                # test = list(filter(lambda x: x.id not in played, episodes))
+
+                chosen_episode = random.choice(episodes) if len(episodes) > 0 else None
+
+                if chosen_episode is None: break
 
                 episode_length_min = self._get_block_min_time(chosen_episode.episode_length)
 
-                print(f"chosen episode {chosen_episode.episode_name} length {chosen_episode.episode_length} min {episode_length_min} fill time {fill_episode_duration}")
+                # print(f"chosen episode {chosen_episode.episode_name} length {chosen_episode.episode_length} min {episode_length_min} fill time {fill_episode_duration}")
 
-                current_block.append(BlockItem(chosen_episode, 0, chosen_episode.episode_length))
+                current_block.append(BlockItem(chosen_episode, 0, chosen_episode.episode_length, chosen_episode.mean_vol))
 
                 current_timing_block = self.get_block_timing(local_current_time, block_timings)
 
@@ -220,9 +226,9 @@ class Scheduler():
                      print(f"clipping: {selected_commercial.episode_name} {selected_commercial.episode_length} to fit remaining time {remaining_time}")
                      offset = remaining_time
 
-                selected_commercials.append(BlockItem(selected_commercial, 0, selected_commercial.episode_length + offset))
+                selected_commercials.append(BlockItem(selected_commercial, 0, selected_commercial.episode_length + offset, selected_commercial.mean_vol))
 
-            return [BlockItem(bumper1, 0, bumper1.episode_length), *selected_commercials, BlockItem(bumper2, 0, bumper2.episode_length)]
+            return [BlockItem(bumper1, 0, bumper1.episode_length, bumper1.mean_vol), *selected_commercials, BlockItem(bumper2, 0, bumper2.episode_length, bumper2.mean_vol)]
 
         def write_schedule_to_file(self, schedule_data: list[BlockItem], date) :
             current_station_config = Station_Controller.get_current_station_config()
@@ -231,7 +237,7 @@ class Scheduler():
             template = "#EXTM3U\n"
 
             for block in schedule_data:
-                template += f"#EXTINF:{block.episode_data.episode_length},{block.episode_data.episode_name},#x-start:{block.start_time}, #x-end:{block.end_time}\n"
+                template += f"#EXTINF:{block.episode_data.episode_length},{block.episode_data.episode_name},#x-start:{block.start_time}, #x-end:{block.end_time}, #x-mean-vol:{block.episode_data.mean_vol}\n"
                 template += f"{block.episode_data.episode_location}\n"
 
             with open(f"{directory}{date}.m3u8", "w", encoding="utf-8") as file:

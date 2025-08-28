@@ -34,12 +34,13 @@ class StationConfig():
             self.playlist_file = ""
 
 class PlayListItem():
-    def __init__(self, path, duration, start_time_override = 0, end_time_override = 0):
+    def __init__(self, path, duration, start_time_override = 0, end_time_override = 0, mean_volume = 0):
         self.path = path
         self.start_time_override = start_time_override if start_time_override > 0 else 0
         self.end_time_override = end_time_override if end_time_override > 0 else duration
         self.og_duration = duration
         self.duration = (self.end_time_override if self.end_time_override < duration else duration) - self.start_time_override
+        self.mean_volume = mean_volume
 
 class M3u8Parser():
     def parsefile(m3u8Src) -> list[PlayListItem]:
@@ -63,11 +64,14 @@ class M3u8Parser():
 
                         if "#x-end:" in item:
                             end_time_override = float(item.split(":")[1])
+                        
+                        if "#x-mean-vol:" in item:
+                            mean_volume = float(item.split(":")[1])
 
                     path = file.readline().rstrip('\r\n')
 
-                    myPlayList.append(PlayListItem(path, duration, start_time_override, end_time_override))
-                    
+                    myPlayList.append(PlayListItem(path, duration, start_time_override, end_time_override, mean_volume))
+
             return myPlayList
         except Exception as ex:
             print("error occured:", ex)

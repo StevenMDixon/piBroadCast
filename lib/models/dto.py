@@ -9,6 +9,7 @@ class EpisodeData:
     media_type: str
     play_count: int = 0
     tags: str = ""
+    mean_vol: float = 0.0
     id: int = 0
 
     def __iter__(self):
@@ -19,6 +20,7 @@ class EpisodeData:
         yield self.media_type
         yield self.play_count
         yield self.tags
+        yield self.mean_vol
 
 
 @dataclass

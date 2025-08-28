@@ -1,3 +1,4 @@
+import json
 from urllib.request import pathname2url
 import ffmpeg
 import os
@@ -11,11 +12,20 @@ class VideoLoader:
 
             for root, _, files in os.walk(target_directory):
                 for file in files:
-                    if file.lower().endswith(video_extensions):
-                        full_path = os.path.join(root, file)
-                        
-                        duration = float(ffmpeg.probe(full_path)["format"]["duration"])
-                        video_files.append({'path': 'file:' + pathname2url(full_path), 'name': file, 'duration': duration, 'media_type': type, 'tags': tags})
+                   if file.lower() == 'video_metadata.json':
+                    with open(os.path.join(root, file), 'r') as f:
+                        metadata = json.load(f)
+                      
+                        for item in metadata:
+                            video_files.append({
+                                'path': 'file:' + pathname2url(os.path.join(root, item['name'])),
+                                'name': item['name'],
+                                'duration': item['duration'],
+                                'media_type': type,
+                                'tags': tags,
+                                'mean_vol': item['mean_volume']
+                            })
+                        print(f"Loaded {len(metadata)} items from {os.path.join(root, file)}")
 
             return video_files
     

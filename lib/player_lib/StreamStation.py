@@ -15,7 +15,7 @@ class StreamStation(IStation):
         self.set_station_config({})
 
         self.playlist_data = [
-            PlayListItem(stream_url, 9999999, start_time_override = 0, end_time_override = 9999999)
+            PlayListItem(stream_url, 9999999, start_time_override = 0, end_time_override = 9999999, mean_volume=-18)
         ]
 
     def set_station_config(self, station_config) -> None:

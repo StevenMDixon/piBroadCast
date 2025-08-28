@@ -64,6 +64,6 @@ def split_video(video_path, cut_points, output_dir="black_splits"):
 
 # === MAIN ===
 
-VIDEO_FILE = "Kids WB! - Comic Book IDs (2007-2008) [RmDjNcPmoDo].mkv"  # <-- Replace with your actual file
-black_ends = detect_black_frames(VIDEO_FILE, black_duration=0.1, black_threshold=0.90)
+VIDEO_FILE = "t.mkv"  # <-- Replace with your actual file
+black_ends = detect_black_frames(VIDEO_FILE, black_duration=0.5, black_threshold=0.90)
 split_video(VIDEO_FILE, black_ends, output_dir="output_black_splits")

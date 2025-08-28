@@ -39,6 +39,23 @@ class Episode_Controller:
         cursor.execute("SELECT * FROM episode_metadata where media_type = ?", (type,))
         return Episode_Controller._convert_list(cursor.fetchall())
     
+
+    @staticmethod
+    def get_all_show_episodes_by_show_name_and_duration(show_name, already_played, duration) -> list[EpisodeData]:
+        db = DataBase._get_conn()
+        cursor = db.cursor()
+
+        if len(already_played) > 0:
+            placeholders = ', '.join('?' * len(already_played))
+            sql = f"SELECT * FROM episode_metadata where show_name = ? and episode_length <= ? and id not in ({placeholders}) ORDER BY play_count ASC LIMIT 20"
+            params = (show_name, duration, *already_played)
+        else:
+            sql = f"SELECT * FROM episode_metadata where show_name = ? and episode_length <= ? ORDER BY play_count ASC LIMIT 20"
+            params = (show_name, duration)
+
+        cursor.execute(sql, params)
+        return Episode_Controller._convert_list(cursor.fetchall())
+
     @staticmethod
     def get_all_episode_metadata_by_type_by_lowest_play_count(type, show_name, already_played) -> list[EpisodeData]:
         db = DataBase._get_conn()
@@ -95,7 +112,7 @@ class Episode_Controller:
         db = DataBase._get_conn()
         cursor = db.cursor()
         prepared = [tuple(episode) for episode in episodes]
-        cursor.executemany("insert into episode_metadata (show_name, episode_name, episode_location, episode_length, media_type, play_count, tags) values (?,?,?,?,?,?,?)", prepared)
+        cursor.executemany("insert into episode_metadata (show_name, episode_name, episode_location, episode_length, media_type, play_count, tags, mean_vol) values (?,?,?,?,?,?,?,?)", prepared)
         db.commit()
         db.close()
 

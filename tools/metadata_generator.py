@@ -1,3 +1,4 @@
+import json
 from urllib.request import pathname2url
 import ffmpeg
 import os
@@ -15,13 +16,13 @@ if __name__ == "__main__":
         print("Please provide a valid directory")
         sys.exit(1)
 
-    video_files = []
+    video_file_data = {}
 
-    for root, _, files in os.walk(directory):
+    for root, dirs, files in os.walk(directory):
         for file in files:
             if file.lower().endswith(video_extensions):
                 full_path = os.path.join(root, file)
-                
+
                 duration = float(ffmpeg.probe(full_path)["format"]["duration"])
 
                 mean_volume = 0
@@ -44,10 +45,21 @@ if __name__ == "__main__":
                     print(f"FFmpeg Error: {e.stderr.decode('utf-8')}")
                 except Exception as e:
                     print(f"An error occurred: {e}")
-                
-                video_files.append({'path': 'file:' + pathname2url(full_path), 'name': file, 'duration': duration, 'media_type': type, 'tags': '', 'mean_volume': mean_volume, 'max_volume': max_volume})
 
-                if mean_volume < -30:
-                    print(f"Low mean volume detected in {file}: {mean_volume} dB")
+                # 'path': pathname2url(full_path.replace(directory, '')),
 
-    print(video_files)
+                myData = {                    
+                    'name': file,
+                    'duration': duration,
+                    'mean_volume': mean_volume,
+                    'max_volume': max_volume
+                }
+
+                if root not in video_file_data:
+                    video_file_data[root] = []
+
+                video_file_data[root].append(myData)
+
+    for key in video_file_data:
+        with open(key + '/video_metadata.json', 'w') as f:
+            json.dump(video_file_data[key], f)

@@ -7,7 +7,9 @@ class VLCPlayer:
     def __init__(self, station):
         self.station = station
         # Options ['--file-caching=5000', '--network-caching=10000', '--verbose=3']
-        self.instance = vlc.Instance(['--no-skip-frames', '--no-xlib', '--file-caching=5000','--network-caching=5000'])
+        options = ['--no-skip-frames', '--no-xlib', '--file-caching=5000','--network-caching=5000', '--audio-filter=normvol', '--norm-max-level=1.00', '--gain=8.0']
+
+        self.instance = vlc.Instance(options)
 
         if len(self.station.playlist_data) > 1:
             self.player = self.createListPlayer()
@@ -31,13 +33,15 @@ class VLCPlayer:
         list_player = self.instance.media_list_player_new()
         media_player = self.instance.media_player_new()
         media_player.video_set_aspect_ratio("4:3")
-        
+        media_player.video_set_spu(-1)
 
         list_player.set_media_player(media_player)
         list_player.set_media_list(media_list)
 
         # list_player_event_manager = list_player.event_manager()
-        # media_player_event_manager = media_player.event_manager()
+        media_player_event_manager = media_player.event_manager()
+
+        media_player_event_manager.event_attach(vlc.EventType.MediaPlayerMediaChanged, self.media_changed_callback)
 
         # media_player_event_manager.event_attach(vlc.EventType.MediaPlayerPlaying, self.event_handler)
         # list_player_event_manager.event_attach(vlc.EventType.MediaListPlayerNextItemSet, self.event_handler)
@@ -87,23 +91,19 @@ class VLCPlayer:
     def start(self) -> None:
         self.player.play()
 
-    # def event_handler(self, event):
-    #     print(f"Event: {event.type}")
-    #     if event.type == vlc.EventType.MediaListPlayerNextItemSet:
-    #         print(self.player.get_media_player().get_length())
-    #     if event.type == vlc.EventType.MediaPlayerPlaying:
-    #         print(self.player.get_media_player().get_length())
+    def media_changed_callback(self, event):
+        print(f"Media changed: {event.type}")
+        player = self.player.get_media_player()
+        current_show = player.get_media().get_mrl()
 
-    #implemented in window to pass key presses to the player
-    #def handleKeyPress(self, keypress):
-        # # if we press the space bar resume playing
-        # if keypress == 32:
-        #     my_media_list = self.create_media_list(self.station)
-        #     self.player.stop()
-        #     self.player.set_media_list(my_media_list)
-        #     self.player.play()
-        # print(keypress)
-        #return
+        current_show_metadata = filter(lambda x: x.path == current_show, self.station.playlist_data)
+
+        if current_show_metadata is not None:
+            show = list(current_show_metadata)[0]
+            print(f"Current show: {show}")
+            target_volume = self.calculate_vlc_volume(show.mean_volume)
+            print(target_volume)
+            player.audio_set_volume(target_volume)
 
     def periodic_task(self) -> None:
         if self.station.data_changed():
@@ -112,3 +112,19 @@ class VLCPlayer:
             my_media_list = self.create_media_list(self.station)
             self.player.set_media_list(my_media_list)
             self.start()
+            
+    def calculate_volume_gain_db(self, current_db, target_db=-18.0):
+        return target_db - current_db  # positive = increase, negative = decrease
+    
+    def db_to_linear_gain(self, db):
+        return 10 ** (db / 20)
+
+    def calculate_vlc_volume(self, mean_db: float) -> int:
+        gain_db = self.calculate_volume_gain_db(mean_db)
+        gain_linear = self.db_to_linear_gain(gain_db)
+
+        # Calculate the VLC volume based on the desired percentage of the mean.
+        # Ensure the value is within VLC's valid range (0-100).
+        target_vlc_volume =  int(min(max(gain_linear * 100, 0), 200))
+        
+        return target_vlc_volume

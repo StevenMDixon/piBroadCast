@@ -198,3 +198,11 @@ Every time I squash one another pops up.
 2. Murderlated a bug that made it to where the first show would never start... Turns out negative time exists....
 
 # Why is it so hard to get swagger setup for flask...
+I give up, its just not worth it
+
+# vOlUmE is hard
+So all of my media tends to have different levels of sound.... loud commercials and quite shows leave a bad impression. VLC has functionality to normalize audio. All I needed to do was
+implement a way for the volume to change based on the media being played. 
+
+# Rescanning drives over the network is soooo slow, and the pi makes it slower.
+So I have implemented a tool that will scan each directory on a drive and add a metadata.json file that includes duration and volume data.
