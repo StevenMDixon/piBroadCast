@@ -1,5 +1,5 @@
-EXTM3U
+#EXTM3U
+#EXT-X-VERSION:3
 
-EXTINF:-1, Swim Rewind
-
+#EXTINF:0,  tvg-name="Swim Rewind" group-title="Swim Rewind",Swim Rewind
 https://swimrewind.com/hls/stream.m3u8
