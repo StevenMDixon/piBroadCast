@@ -23,8 +23,8 @@ class VLCPlayer:
 
         player = self.instance.media_player_new()
         player.set_media(media)
-        player.video_set_aspect_ratio("4:3")
-
+        # player.video_set_aspect_ratio("4:3")
+        player.video_set_crop_geometry("4:3")
         return player
 
     def createListPlayer(self) -> vlc.MediaListPlayer: 
@@ -32,7 +32,8 @@ class VLCPlayer:
        
         list_player = self.instance.media_list_player_new()
         media_player = self.instance.media_player_new()
-        media_player.video_set_aspect_ratio("4:3")
+        # media_player.video_set_aspect_ratio("4:3")
+        media_player.video_set_crop_geometry("4:3")
         media_player.video_set_spu(-1)
 
         list_player.set_media_player(media_player)

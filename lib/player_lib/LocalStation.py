@@ -15,10 +15,12 @@ class LocalStation(IStation):
 
         self.load_station_config_from_file(my_station_settings_path)
         self.set_station_config(self.station_config)
+        print(self.playlist_data)
 
     def set_station_config(self, station_config) -> None:
         self.station_config = StationConfig(station_config)
         self.set_playlist_file()
+        print(self.station_config.playlist_file)
         self.setup_playlist_data()
         timing_data = get_timing_data(self.station_config.start_time, self.playlist_data)
         self.playlist_start_index = timing_data["index"]
@@ -39,7 +41,7 @@ class LocalStation(IStation):
         except:
             self.station_config = {
                     "station_name": "Error",
-                    "playlist_location": "",
+                    "playlist_location": "./playlists/",
                     "start_time": -1
             }
 
@@ -52,7 +54,7 @@ class LocalStation(IStation):
                 if today in item:
                     self.station_config.playlist_file = self.station_config.play_list_location + item
                     return
-            print(self.station_config.play_list_location)
+            
             self.station_config.playlist_file =  self.station_config.play_list_location + 'default.m3u8'
         except:
             return

@@ -1,5 +1,3 @@
 #EXTM3U
-#EXTINF:3398,Y2K TV Commercials Part 3 • 60 FPS 2000.mp4, #x-start:0, #x-end:10
-file:///C:/Users/Helreizer55/Downloads/Y2K%20TV%20Commercials%20Part%203%20%E2%80%A2%2060%20FPS%202000.mp4
-#EXTINF:3237,Y2K TV Commercials Part 4 • 60 FPS 2000.mp4, #x-start:0, #x-end:10
-file:///C:/Users/Helreizer55/Downloads/Y2K%20TV%20Commercials%20Part%204%20%E2%80%A2%2060%20FPS%202000.mp4
+#EXTINF:3398,Y2K TV Commercials Part 3 • 60 FPS 2000.mp4, #x-start:0, #x-end:99999, #x-mean-vol:-18
+file:///I:/Commercials/Kids/%5B09.28.99%5D%20TnT%20Animal%20Farm%20Premiere.mp4
